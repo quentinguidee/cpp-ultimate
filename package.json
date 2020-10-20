@@ -1,45 +1,91 @@
 {
-	"name": "cpp-ultimate",
-	"displayName": "C++ Ultimate",
-	"description": "The extension you need for C++",
-	"version": "0.0.1",
-	"engines": {
-		"vscode": "^1.50.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-		"onCommand:cpp-ultimate.helloWorld"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
+    "name": "cpp-ultimate",
+    "displayName": "C++ Ultimate",
+    "description": "The extension you need for C++",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.50.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onCommand:cpp-ultimate.createClass",
+        "onCommand:cpp-ultimate.createHeader",
+        "onCommand:cpp-ultimate.createSource"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "cpp-ultimate.createClass",
+                "title": "Create C++ class"
+            },
+            {
+                "command": "cpp-ultimate.createHeader",
+                "title": "Create header file"
+            },
+            {
+                "command": "cpp-ultimate.createSource",
+                "title": "Create source file"
+            }
+        ],
+        "menus": {
+            "explorer/context": [
+                {
+                    "when": "explorerResourceIsFolder",
+                    "command": "cpp-ultimate.createClass",
+                    "group": "cpp-ultimate-class"
+                },
+                {
+                    "when": "explorerResourceIsFolder",
+                    "command": "cpp-ultimate.createHeader",
+                    "group": "cpp-ultimate-files"
+                },
+                {
+                    "when": "explorerResourceIsFolder",
+                    "command": "cpp-ultimate.createSource",
+                    "group": "cpp-ultimate-files"
+                }
+            ]
+		},
+		"configuration":[
 			{
-				"command": "cpp-ultimate.helloWorld",
-				"title": "Hello World"
+				"title": "C++ Ultimate",
+				"properties": {
+					"cpp-ultimate.files.header-extension": {
+						"type": "string",
+						"enum": ["hpp", "hxx", "h"],
+						"description": "C++ headers file extension."
+					},
+					"cpp-ultimate.files.source-extension": {
+						"type": "string",
+						"enum": ["cpp", "cxx", "c"],
+						"description": "C++ sources file extension."
+					}
+				}
 			}
 		]
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"lint": "eslint src --ext ts",
-		"watch": "tsc -watch -p ./",
-		"pretest": "npm run compile && npm run lint",
-		"test": "node ./out/test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/vscode": "^1.50.0",
-		"@types/glob": "^7.1.3",
-		"@types/mocha": "^8.0.0",
-		"@types/node": "^12.11.7",
-		"eslint": "^7.9.0",
-		"@typescript-eslint/eslint-plugin": "^4.1.1",
-		"@typescript-eslint/parser": "^4.1.1",
-		"glob": "^7.1.6",
-		"mocha": "^8.1.3",
-		"typescript": "^4.0.2",
-		"vscode-test": "^1.4.0"
-	}
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "lint": "eslint src --ext ts",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile && npm run lint",
+        "test": "node ./out/test/runTest.js"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.50.0",
+        "@types/glob": "^7.1.3",
+        "@types/mocha": "^8.0.0",
+        "@types/node": "^12.11.7",
+        "eslint": "^7.9.0",
+        "@typescript-eslint/eslint-plugin": "^4.1.1",
+        "@typescript-eslint/parser": "^4.1.1",
+        "glob": "^7.1.6",
+        "mocha": "^8.1.3",
+        "typescript": "^4.0.2",
+        "vscode-test": "^1.4.0"
+    }
 }
