@@ -5,10 +5,12 @@ async function createClass(context: any) {
     await vscode.window.showInputBox({
         prompt: "Class name",
         placeHolder: "Class"
-    }).then((filename) => {
-        if (!filename) { return; }
-        createFile(context, filename, getHeaderExtension(), "");
-        createFile(context, filename, getSourceExtension(), "");
+    }).then((classname) => {
+        if (!classname) { return; }
+        var filename = classname.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+        if (filename[0] === '_') { filename = filename.slice(1, filename.length); }
+        createFile(context, filename, getHeaderExtension(), getHeaderClassTemplate(filename, classname));
+        createFile(context, filename, getSourceExtension(), getSourceClassTemplate(filename));
     });
 }
 
@@ -18,7 +20,7 @@ async function createHeader(context: any) {
         placeHolder: "Filename"
     }).then((filename) => {
         if (!filename) { return; }
-        createFile(context, filename, getHeaderExtension(), "");
+        createFile(context, filename, getHeaderExtension(), getHeaderTemplate(filename));
     });
 }
 
@@ -43,6 +45,36 @@ function getSourceExtension(): string {
 async function createFile(context: any, filename: string, extension: string, content: string) {
     const file = vscode.Uri.file(context.path + '/' + filename + '.' + extension);
     await writeFile(file.fsPath, content, () => { });
+}
+
+function getHeaderClassTemplate(filename: string, classname: string) {
+    filename = filename.toUpperCase();
+    let extension = getHeaderExtension().toUpperCase();
+    return `#ifndef ${filename}_${extension}\n` +
+        `#define ${filename}_${extension}\n` +
+        `\n` +
+        `class ${classname}\n` +
+        `{\n` +
+        `private:\n` +
+        `public:\n` +
+        `   ${classname}() {}\n` +
+        `   ~${classname}() {}\n` +
+        `};\n` +
+        `\n` +
+        `#endif /* ${filename}_${extension} */\n`;
+}
+
+function getHeaderTemplate(filename: string) {
+    filename = filename.toUpperCase();
+    let extension = getHeaderExtension().toUpperCase();
+    return `#ifndef ${filename}_${extension}\n` +
+        `#define ${filename}_${extension}\n` +
+        `\n` +
+        `#endif /* ${filename}_${extension} */\n`;
+}
+
+function getSourceClassTemplate(filename: string) {
+    return `#include "${filename}.${getHeaderExtension()}"\n`;
 }
 
 export { createClass, createHeader, createSource };
