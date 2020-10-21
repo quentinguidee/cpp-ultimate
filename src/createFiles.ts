@@ -1,4 +1,4 @@
-import { writeFile } from 'fs';
+import { existsSync, writeFile } from 'fs';
 import * as vscode from 'vscode';
 
 async function createClass(context: any) {
@@ -34,6 +34,10 @@ async function createSource(context: any) {
     });
 }
 
+function createCMakeLists(context: any) {
+    createFile(context, 'CMakeLists', 'txt', getCMakeListsTemplate());
+}
+
 function getHeaderExtension(): string {
     return vscode.workspace.getConfiguration().get("cpp-ultimate.files.header-extension") || "hpp";
 }
@@ -42,9 +46,14 @@ function getSourceExtension(): string {
     return vscode.workspace.getConfiguration().get("cpp-ultimate.files.source-extension") || "cpp";
 }
 
-async function createFile(context: any, filename: string, extension: string, content: string) {
-    const file = vscode.Uri.file(context.path + '/' + filename + '.' + extension);
-    await writeFile(file.fsPath, content, () => { });
+function createFile(context: any, filename: string, extension: string, content: string) {
+    const path = context.path + '/' + filename + '.' + extension;
+    if (existsSync(path)) {
+        vscode.window.showInformationMessage('The file ' + filename + '.' + extension + ' already exists.');
+        return;
+    }
+    const file = vscode.Uri.file(path);
+    writeFile(file.fsPath, content, () => { });
 }
 
 function getHeaderClassTemplate(filename: string, classname: string) {
@@ -77,4 +86,16 @@ function getSourceClassTemplate(filename: string) {
     return `#include "${filename}.${getHeaderExtension()}"\n`;
 }
 
-export { createClass, createHeader, createSource };
+function getCMakeListsTemplate() {
+    return `set(HEADERS\n` +
+        `\n` +
+        `)\n` +
+        `\n` +
+        `set(SOURCES\n` +
+        `\n` +
+        `)\n` +
+        `\n` +
+        'target_sources(library PUBLIC ${HEADERS} ${SOURCES})\n';
+}
+
+export { createClass, createHeader, createSource, createCMakeLists };

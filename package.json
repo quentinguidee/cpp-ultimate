@@ -12,7 +12,8 @@
     "activationEvents": [
         "onCommand:cpp-ultimate.createClass",
         "onCommand:cpp-ultimate.createHeader",
-        "onCommand:cpp-ultimate.createSource"
+        "onCommand:cpp-ultimate.createSource",
+        "onCommand:cpp-ultimate.createCMakeLists"
     ],
     "main": "./out/extension.js",
     "contributes": {
@@ -28,6 +29,10 @@
             {
                 "command": "cpp-ultimate.createSource",
                 "title": "Create C++ source file"
+            },
+            {
+                "command": "cpp-ultimate.createCMakeLists",
+                "title": "Create CMakeLists.txt"
             }
         ],
         "menus": {
@@ -46,6 +51,11 @@
                     "when": "explorerResourceIsFolder",
                     "command": "cpp-ultimate.createSource",
                     "group": "cpp-ultimate-files"
+                },
+                {
+                    "when": "explorerResourceIsFolder",
+                    "command": "cpp-ultimate.createCMakeLists",
+                    "group": "cpp-ultimate-cmake"
                 }
             ]
 		},
