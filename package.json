@@ -10,6 +10,7 @@
         "Other"
     ],
     "activationEvents": [
+        "onLanguage:cpp",
         "onCommand:cpp-ultimate.createClass",
         "onCommand:cpp-ultimate.createHeader",
         "onCommand:cpp-ultimate.createSource",
@@ -75,7 +76,7 @@
 					}
 				}
 			}
-		]
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
