@@ -1,9 +1,12 @@
-# Change Log
+# Changelog
 
-All notable changes to the "cpp-ultimate" extension will be documented in this file.
+## [0.2.0] - 2020-10-21
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+- Create header snippet
 
-## [Unreleased]
+## [0.1.0] - 2020-10-20
 
-- Initial release
+- Create C++ class
+- Create C++ header
+- Create C++ source
+- Create CMakeLists.txt

@@ -1,8 +1,19 @@
 {
     "name": "cpp-ultimate",
+    "author": {
+        "name": "Quentin Guidée",
+        "email": "quentin.guidee@gmail.com",
+        "url": "https://github.com/quentinguidee"
+    },
+    "publisher": "quentinguidee",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/quentinguidee/CPP-Ultimate/"
+    },
+    "preview": true,
     "displayName": "C++ Ultimate",
     "description": "The extension you need for C++",
-    "version": "0.0.1",
+    "version": "0.2.0",
     "engines": {
         "vscode": "^1.50.0"
     },
