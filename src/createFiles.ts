@@ -66,8 +66,8 @@ function getHeaderClassTemplate(filename: string, classname: string) {
         `{\n` +
         `private:\n` +
         `public:\n` +
-        `   ${classname}() {}\n` +
-        `   ~${classname}() {}\n` +
+        `    ${classname}() {}\n` +
+        `    ~${classname}() {}\n` +
         `};\n` +
         `\n` +
         `#endif /* ${filename}_${extension} */\n`;

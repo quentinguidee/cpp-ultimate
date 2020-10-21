@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.1] - 2020-10-21
+
+- Fix C++ header indentation
+
 ## [0.2.0] - 2020-10-21
 
 - Create header snippet
