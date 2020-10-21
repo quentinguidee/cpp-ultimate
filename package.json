@@ -23,11 +23,11 @@
             },
             {
                 "command": "cpp-ultimate.createHeader",
-                "title": "Create header file"
+                "title": "Create C++ header file"
             },
             {
                 "command": "cpp-ultimate.createSource",
-                "title": "Create source file"
+                "title": "Create C++ source file"
             }
         ],
         "menus": {
