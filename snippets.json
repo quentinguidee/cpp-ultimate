@@ -1,0 +1,22 @@
+{
+    "includeA": {
+        "scope": "c,cpp",
+        "prefix": "#include <file>",
+        "body": "#include <${1:file}>$0"
+    },
+    "includeB": {
+        "scope": "c,cpp",
+        "prefix": "#include \"file\"",
+        "body": "#include \"${1:file}\"$0"
+    },
+    "main": {
+        "scope": "c,cpp",
+        "prefix": "main()",
+        "body": "int main() {$0}"
+    },
+    "mainWithArgs": {
+        "scope": "c,cpp",
+        "prefix": "main(argc, argv)",
+        "body": "int main(int argc, char* argv[]) {$0}"
+    }
+}

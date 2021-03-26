@@ -4,6 +4,7 @@ C++ Ultimate is the extension you need for VSCode!
 
 ## Features
 
+- C/C++ snippets
 - Create C++ class/header/source
 - Create CMakeLists.txt file
 - Create .clang-format with a gist template

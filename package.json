@@ -19,9 +19,11 @@
         "vscode": "^1.50.0"
     },
     "categories": [
-        "Other"
+        "Other",
+        "Snippets"
     ],
     "activationEvents": [
+        "onLanguage:c",
         "onLanguage:cpp",
         "onCommand:cpp-ultimate.createClass",
         "onCommand:cpp-ultimate.createHeader",
@@ -110,6 +112,16 @@
                         "default": "28ca0c7533aac5a5185b5f2651c35e8a"
                     }
                 }
+            }
+        ],
+        "snippets": [
+            {
+                "language": "c",
+                "path": "./snippets.json"
+            },
+            {
+                "language": "cpp",
+                "path": "./snippets.json"
             }
         ]
     },

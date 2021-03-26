@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.3.1] - 2021-03-26
+
+- New snippets (`#include <>`, `#include ""`, `main()` and `main(const int)`)
+
 ## [0.3.0] - 2021-03-26
 
 - Create .clang-format file. Gist ID of the template can be changed in the settings.
