@@ -3,6 +3,7 @@
 ## [0.3.1] - 2021-03-26
 
 - New snippets (`#include <>`, `#include ""`, `main()` and `main(const int)`)
+- Snippets available in C files
 
 ## [0.3.0] - 2021-03-26
 
