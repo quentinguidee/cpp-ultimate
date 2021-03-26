@@ -1,10 +1,8 @@
 import * as vscode from "vscode";
+import { TextDocument, Position } from "vscode";
 
 const headerSnippet = vscode.languages.registerCompletionItemProvider("cpp", {
-    provideCompletionItems(
-        document: vscode.TextDocument,
-        position: vscode.Position
-    ) {
+    provideCompletionItems(document: TextDocument, position: Position) {
         const filename = document.fileName
             .replace(/^.*[\\\/]/, "")
             .replace(".", "_")
