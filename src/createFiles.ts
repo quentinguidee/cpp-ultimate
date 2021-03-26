@@ -1,5 +1,8 @@
+import { Octokit } from "@octokit/core";
 import { existsSync, writeFile } from "fs";
 import * as vscode from "vscode";
+
+const octokit = new Octokit();
 
 async function createClass(context: any) {
     await vscode.window
@@ -70,6 +73,23 @@ function createCMakeLists(context: any) {
     createFile(context, "CMakeLists", "txt", getCMakeListsTemplate());
 }
 
+async function createClangFormat(context: any) {
+    vscode.window.withProgress(
+        {
+            title: "Downloading .clang-format template from Gist...",
+            location: vscode.ProgressLocation.Notification,
+        },
+        (progress, token) => {
+            return new Promise((resolve, reject) => {
+                getClangFormatTemplate().then((template) => {
+                    createFile(context, "", "clang-format", template);
+                    resolve("Finished");
+                });
+            });
+        }
+    );
+}
+
 function getHeaderExtension(): string {
     return (
         vscode.workspace
@@ -83,6 +103,15 @@ function getSourceExtension(): string {
         vscode.workspace
             .getConfiguration()
             .get("cpp-ultimate.files.source-extension") || "cpp"
+    );
+}
+
+function getClangFormatGistID(): string {
+    return (
+        vscode.workspace
+            .getConfiguration()
+            .get("cpp-ultimate.clang-format.gist-id") ||
+        "28ca0c7533aac5a5185b5f2651c35e8a"
     );
 }
 
@@ -151,4 +180,33 @@ function getCMakeListsTemplate() {
     );
 }
 
-export { createClass, createHeader, createSource, createCMakeLists };
+async function getClangFormatTemplate(): Promise<string> {
+    const gistID = getClangFormatGistID();
+    const error = `Error while fetching ${gistID}`;
+
+    return new Promise((resolve, reject) => {
+        octokit
+            .request("GET /gists/{gist_id}", {
+                gist_id: getClangFormatGistID(), // eslint-disable-line
+            })
+            .then((response) => {
+                console.log(response);
+                if (response.data.files) {
+                    resolve(
+                        response.data.files[".clang-format"]?.content || error
+                    );
+                } else {
+                    reject(error);
+                }
+            })
+            .catch((e) => reject(e));
+    });
+}
+
+export {
+    createClass,
+    createHeader,
+    createSource,
+    createCMakeLists,
+    createClangFormat,
+};

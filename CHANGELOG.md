@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.3.0] - 2021-03-26
+
+- Create .clang-format file. Gist ID of the template can be changed in the settings.
+
 ## [0.2.1] - 2020-10-21
 
 - Fix C++ header indentation

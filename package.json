@@ -25,7 +25,8 @@
         "onCommand:cpp-ultimate.createClass",
         "onCommand:cpp-ultimate.createHeader",
         "onCommand:cpp-ultimate.createSource",
-        "onCommand:cpp-ultimate.createCMakeLists"
+        "onCommand:cpp-ultimate.createCMakeLists",
+        "onCommand:cpp-ultimate.createClangFormat"
     ],
     "main": "./out/extension.js",
     "contributes": {
@@ -45,6 +46,10 @@
             {
                 "command": "cpp-ultimate.createCMakeLists",
                 "title": "Create CMakeLists.txt"
+            },
+            {
+                "command": "cpp-ultimate.createClangFormat",
+                "title": "Create .clang-format"
             }
         ],
         "menus": {
@@ -68,25 +73,43 @@
                     "when": "explorerResourceIsFolder",
                     "command": "cpp-ultimate.createCMakeLists",
                     "group": "cpp-ultimate-cmake"
+                },
+                {
+                    "when": "explorerResourceIsFolder",
+                    "command": "cpp-ultimate.createClangFormat",
+                    "group": "cpp-ultimate-format"
                 }
             ]
-		},
-		"configuration":[
-			{
-				"title": "C++ Ultimate",
-				"properties": {
-					"cpp-ultimate.files.header-extension": {
-						"type": "string",
-						"enum": ["hpp", "hxx", "h"],
-						"description": "C++ headers file extension."
-					},
-					"cpp-ultimate.files.source-extension": {
-						"type": "string",
-						"enum": ["cpp", "cxx", "c"],
-						"description": "C++ sources file extension."
-					}
-				}
-			}
+        },
+        "configuration": [
+            {
+                "title": "C++ Ultimate",
+                "properties": {
+                    "cpp-ultimate.files.header-extension": {
+                        "type": "string",
+                        "enum": [
+                            "hpp",
+                            "hxx",
+                            "h"
+                        ],
+                        "description": "C++ headers file extension."
+                    },
+                    "cpp-ultimate.files.source-extension": {
+                        "type": "string",
+                        "enum": [
+                            "cpp",
+                            "cxx",
+                            "c"
+                        ],
+                        "description": "C++ sources file extension."
+                    },
+                    "cpp-ultimate.clang-format.gist-id": {
+                        "type": "string",
+                        "description": "Gist ID of your clang-format file. The file must be named .clang-format to work.",
+                        "default": "28ca0c7533aac5a5185b5f2651c35e8a"
+                    }
+                }
+            }
         ]
     },
     "scripts": {
@@ -109,5 +132,8 @@
         "mocha": "^8.1.3",
         "typescript": "^4.0.2",
         "vscode-test": "^1.4.0"
+    },
+    "dependencies": {
+        "@octokit/core": "^3.3.1"
     }
 }

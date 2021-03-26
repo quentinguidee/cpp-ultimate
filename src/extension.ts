@@ -3,6 +3,7 @@ import {
     createHeader,
     createSource,
     createCMakeLists,
+    createClangFormat,
 } from "./createFiles";
 import { headerSnippet } from "./snippets";
 import * as vscode from "vscode";
@@ -28,6 +29,10 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.commands.registerCommand(
             "cpp-ultimate.createCMakeLists",
             createCMakeLists
+        ),
+        vscode.commands.registerCommand(
+            "cpp-ultimate.createClangFormat",
+            createClangFormat
         ),
 
         headerSnippet
