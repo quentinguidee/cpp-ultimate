@@ -1,65 +1,113 @@
-import { existsSync, writeFile } from 'fs';
-import * as vscode from 'vscode';
+import { existsSync, writeFile } from "fs";
+import * as vscode from "vscode";
 
 async function createClass(context: any) {
-    await vscode.window.showInputBox({
-        prompt: "Class name",
-        placeHolder: "Class"
-    }).then((classname) => {
-        if (!classname) { return; }
-        var filename = classname.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-        if (filename[0] === '_') { filename = filename.slice(1, filename.length); }
-        createFile(context, filename, getHeaderExtension(), getHeaderClassTemplate(filename, classname));
-        createFile(context, filename, getSourceExtension(), getSourceClassTemplate(filename));
-    });
+    await vscode.window
+        .showInputBox({
+            prompt: "Class name",
+            placeHolder: "Class",
+        })
+        .then((classname) => {
+            if (!classname) {
+                return;
+            }
+            var filename = classname.replace(
+                /[A-Z]/g,
+                (letter) => `_${letter.toLowerCase()}`
+            );
+            if (filename[0] === "_") {
+                filename = filename.slice(1, filename.length);
+            }
+            createFile(
+                context,
+                filename,
+                getHeaderExtension(),
+                getHeaderClassTemplate(filename, classname)
+            );
+            createFile(
+                context,
+                filename,
+                getSourceExtension(),
+                getSourceClassTemplate(filename)
+            );
+        });
 }
 
 async function createHeader(context: any) {
-    await vscode.window.showInputBox({
-        prompt: "Header filename",
-        placeHolder: "Filename"
-    }).then((filename) => {
-        if (!filename) { return; }
-        createFile(context, filename, getHeaderExtension(), getHeaderTemplate(filename));
-    });
+    await vscode.window
+        .showInputBox({
+            prompt: "Header filename",
+            placeHolder: "Filename",
+        })
+        .then((filename) => {
+            if (!filename) {
+                return;
+            }
+            createFile(
+                context,
+                filename,
+                getHeaderExtension(),
+                getHeaderTemplate(filename)
+            );
+        });
 }
 
 async function createSource(context: any) {
-    await vscode.window.showInputBox({
-        prompt: "Source filename",
-        placeHolder: "Filename"
-    }).then((filename) => {
-        if (!filename) { return; }
-        createFile(context, filename, getSourceExtension(), "");
-    });
+    await vscode.window
+        .showInputBox({
+            prompt: "Source filename",
+            placeHolder: "Filename",
+        })
+        .then((filename) => {
+            if (!filename) {
+                return;
+            }
+            createFile(context, filename, getSourceExtension(), "");
+        });
 }
 
 function createCMakeLists(context: any) {
-    createFile(context, 'CMakeLists', 'txt', getCMakeListsTemplate());
+    createFile(context, "CMakeLists", "txt", getCMakeListsTemplate());
 }
 
 function getHeaderExtension(): string {
-    return vscode.workspace.getConfiguration().get("cpp-ultimate.files.header-extension") || "hpp";
+    return (
+        vscode.workspace
+            .getConfiguration()
+            .get("cpp-ultimate.files.header-extension") || "hpp"
+    );
 }
 
 function getSourceExtension(): string {
-    return vscode.workspace.getConfiguration().get("cpp-ultimate.files.source-extension") || "cpp";
+    return (
+        vscode.workspace
+            .getConfiguration()
+            .get("cpp-ultimate.files.source-extension") || "cpp"
+    );
 }
 
-function createFile(context: any, filename: string, extension: string, content: string) {
-    const path = context.path + '/' + filename + '.' + extension;
+function createFile(
+    context: any,
+    filename: string,
+    extension: string,
+    content: string
+) {
+    const path = context.path + "/" + filename + "." + extension;
     if (existsSync(path)) {
-        vscode.window.showInformationMessage('The file ' + filename + '.' + extension + ' already exists.');
+        vscode.window.showInformationMessage(
+            "The file " + filename + "." + extension + " already exists."
+        );
         return;
     }
     const file = vscode.Uri.file(path);
-    writeFile(file.fsPath, content, () => { });
+    writeFile(file.fsPath, content, () => {});
 }
 
 function getHeaderClassTemplate(filename: string, classname: string) {
     filename = filename.toUpperCase();
     let extension = getHeaderExtension().toUpperCase();
-    return `#ifndef ${filename}_${extension}\n` +
+    return (
+        `#ifndef ${filename}_${extension}\n` +
         `#define ${filename}_${extension}\n` +
         `\n` +
         `class ${classname}\n` +
@@ -70,16 +118,19 @@ function getHeaderClassTemplate(filename: string, classname: string) {
         `    ~${classname}() {}\n` +
         `};\n` +
         `\n` +
-        `#endif /* ${filename}_${extension} */\n`;
+        `#endif /* ${filename}_${extension} */\n`
+    );
 }
 
 function getHeaderTemplate(filename: string) {
     filename = filename.toUpperCase();
     let extension = getHeaderExtension().toUpperCase();
-    return `#ifndef ${filename}_${extension}\n` +
+    return (
+        `#ifndef ${filename}_${extension}\n` +
         `#define ${filename}_${extension}\n` +
         `\n` +
-        `#endif /* ${filename}_${extension} */\n`;
+        `#endif /* ${filename}_${extension} */\n`
+    );
 }
 
 function getSourceClassTemplate(filename: string) {
@@ -87,7 +138,8 @@ function getSourceClassTemplate(filename: string) {
 }
 
 function getCMakeListsTemplate() {
-    return `set(HEADERS\n` +
+    return (
+        `set(HEADERS\n` +
         `\n` +
         `)\n` +
         `\n` +
@@ -95,7 +147,8 @@ function getCMakeListsTemplate() {
         `\n` +
         `)\n` +
         `\n` +
-        'target_sources(library PUBLIC ${HEADERS} ${SOURCES})\n';
+        "target_sources(library PUBLIC ${HEADERS} ${SOURCES})\n"
+    );
 }
 
 export { createClass, createHeader, createSource, createCMakeLists };
