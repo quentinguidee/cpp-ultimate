@@ -13,7 +13,7 @@
     "preview": true,
     "displayName": "C++ Ultimate",
     "description": "The extension you need for C++",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "license": "MIT",
     "engines": {
         "vscode": "^1.50.0"
