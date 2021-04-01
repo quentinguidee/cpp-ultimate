@@ -3,6 +3,7 @@
 ## [0.3.2] - 2021-03-27
 
 - New preprocessor snippets (`#define`, `#if`, `#elif`, `else`, `endif`, `ifdef` and `ifndef`)
+- New C++ snippet (`return`)
 
 ## [0.3.1] - 2021-03-26
 

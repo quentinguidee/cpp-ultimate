@@ -19,6 +19,11 @@
         "prefix": "main(argc, argv)",
         "body": "int main(int argc, char* argv[]) {$0}"
     },
+    "return": {
+        "scope": "c,cpp",
+        "prefix": "return",
+        "body": "return $0"
+    },
     "preprocessor.define": {
         "scope": "c,cpp",
         "prefix": "#define",
