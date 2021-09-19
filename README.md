@@ -27,6 +27,8 @@ This extension contributes the following settings:
 - `cpp-ultimate.files.header-extension`: header extension (.h, .hxx, .hpp)
 - `cpp-ultimate.files.source-extension`: source extension (.c, .cxx, .cpp)
 
+> Advice: set `editor.suggest.snippetsPreventQuickSuggestions` to `false` to improve autocompletion.
+
 ## License
 
 This extension is released under the [MIT License](./LICENSE.md)
