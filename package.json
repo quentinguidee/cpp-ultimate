@@ -13,7 +13,7 @@
     "preview": true,
     "displayName": "C++ Ultimate",
     "description": "The extension you need for C++",
-    "version": "0.3.1",
+    "version": "0.4.0",
     "license": "MIT",
     "engines": {
         "vscode": "^1.50.0"
@@ -22,6 +22,7 @@
         "Other",
         "Snippets"
     ],
+    "icon": "icon.png",
     "activationEvents": [
         "onLanguage:c",
         "onLanguage:cpp",

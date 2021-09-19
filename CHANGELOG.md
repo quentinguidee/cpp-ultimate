@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.4.0] - 2021-09-19
+
+- Extension published
+
 ## [0.3.2] - 2021-03-27
 
 - New preprocessor snippets (`#define`, `#if`, `#elif`, `else`, `endif`, `ifdef` and `ifndef`)
