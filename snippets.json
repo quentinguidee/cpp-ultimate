@@ -1,10 +1,10 @@
 {
-    "includeA": {
+    "Include library": {
         "scope": "c,cpp",
         "prefix": "#include <file>",
         "body": "#include <${1:file}>$0"
     },
-    "includeB": {
+    "Include file": {
         "scope": "c,cpp",
         "prefix": "#include \"file\"",
         "body": "#include \"${1:file}\"$0"
@@ -14,15 +14,10 @@
         "prefix": "main()",
         "body": "int main() {$0}"
     },
-    "mainWithArgs": {
+    "main with args": {
         "scope": "c,cpp",
         "prefix": "main(argc, argv)",
         "body": "int main(int argc, char* argv[]) {$0}"
-    },
-    "return": {
-        "scope": "c,cpp",
-        "prefix": "return",
-        "body": "return $0"
     },
     "preprocessor.define": {
         "scope": "c,cpp",
