@@ -27,7 +27,7 @@ This extension contributes the following settings:
 - `cpp-ultimate.files.header-extension`: header extension (.h, .hxx, .hpp)
 - `cpp-ultimate.files.source-extension`: source extension (.c, .cxx, .cpp)
 
-> Advice: set `editor.suggest.snippetsPreventQuickSuggestions` to `false` to improve autocompletion.
+> Advice: set `editor.suggest.snippetsPreventQuickSuggestions` to `false` and `C_Cpp.autocompleteAddParentheses` to `true` to improve autocompletion.
 
 ## License
 

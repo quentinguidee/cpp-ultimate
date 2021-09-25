@@ -5,6 +5,7 @@ import {
     Position,
     CompletionItem,
     CompletionItemKind,
+    SnippetString,
 } from "vscode";
 
 const headerSnippet = languages.registerCompletionItemProvider(["c", "cpp"], {
@@ -25,6 +26,29 @@ const headerSnippet = languages.registerCompletionItemProvider(["c", "cpp"], {
         return [item];
     },
 });
+
+const sequencesSnippet = languages.registerCompletionItemProvider(
+    ["c", "cpp"],
+    {
+        provideCompletionItems(document: TextDocument, position: Position) {
+            const keywords = ["while", "if", "for"];
+
+            const items = keywords.map((keyword) => {
+                const item = new CompletionItem(
+                    keyword,
+                    CompletionItemKind.Snippet
+                );
+
+                item.insertText = new SnippetString(`${keyword} ($1) $0`);
+                item.preselect = true;
+
+                return item;
+            });
+
+            return items;
+        },
+    }
+);
 
 const keywordsSnippets = languages.registerCompletionItemProvider(
     ["c", "cpp"],
@@ -105,4 +129,9 @@ const keywordsCppSpecificSnippets = languages.registerCompletionItemProvider(
     }
 );
 
-export { headerSnippet, keywordsSnippets };
+export {
+    headerSnippet,
+    sequencesSnippet,
+    keywordsSnippets,
+    keywordsCppSpecificSnippets,
+};

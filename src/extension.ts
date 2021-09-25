@@ -5,7 +5,12 @@ import {
     createCMakeLists,
     createClangFormat,
 } from "./createFiles";
-import { headerSnippet, keywordsSnippets } from "./snippets";
+import {
+    headerSnippet,
+    keywordsCppSpecificSnippets,
+    keywordsSnippets,
+    sequencesSnippet,
+} from "./snippets";
 import * as vscode from "vscode";
 
 export function activate(context: vscode.ExtensionContext) {
@@ -36,7 +41,9 @@ export function activate(context: vscode.ExtensionContext) {
         ),
 
         headerSnippet,
-        keywordsSnippets
+        sequencesSnippet,
+        keywordsSnippets,
+        keywordsCppSpecificSnippets
     );
 }
 
