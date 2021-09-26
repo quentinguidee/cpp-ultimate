@@ -27,7 +27,16 @@ This extension contributes the following settings:
 - `cpp-ultimate.files.header-extension`: header extension (.h, .hxx, .hpp)
 - `cpp-ultimate.files.source-extension`: source extension (.c, .cxx, .cpp)
 
-> Advice: set `editor.suggest.snippetsPreventQuickSuggestions` to `false` and `C_Cpp.autocompleteAddParentheses` to `true` to improve autocompletion.
+## Recommended settings
+
+Those settings from VSCode can improve your typing experience with C++ Ultimate :
+
+```json
+{
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "C_Cpp.autocompleteAddParentheses": true,
+}
+```
 
 ## License
 
