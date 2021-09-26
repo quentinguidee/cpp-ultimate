@@ -14,10 +14,15 @@ Ultimate extensions are a group of extensions allowing faster coding in VSCode. 
 
 ## Features
 
-- C/C++ snippets
+- C/C++ snippets (with auto-space for keywords)
+
+<img width="360" alt="snippets" src="https://user-images.githubusercontent.com/12123721/134800950-00f84e72-7f11-4c2d-816e-536371a2b332.gif" />
+
 - Create C++ class/header/source
 - Create CMakeLists.txt file
 - Create .clang-format with a gist template
+
+<img width="360" alt="Capture d’écran 2021-09-26 à 10 57 08" src="https://user-images.githubusercontent.com/12123721/134801001-94cbeb93-543e-449a-9bfd-7712c7762e4b.png">
 
 ## Extension Settings
 
