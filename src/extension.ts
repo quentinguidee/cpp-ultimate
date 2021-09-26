@@ -1,45 +1,19 @@
-import {
-    createClass,
-    createHeader,
-    createSource,
-    createCMakeLists,
-    createClangFormat,
-} from "./createFiles";
-import {
-    headerSnippet,
-    keywordsCppSpecificSnippets,
-    keywordsSnippets,
-    sequencesSnippet,
-} from "./snippets";
-import * as vscode from "vscode";
+import { createClass, createHeader, createSource, createCMakeLists, createClangFormat } from "./createFiles";
+import { headerSnippet, keywordsCppSpecificSnippets, keywordsSnippets, sequencesSnippet } from "./snippets";
+import { commands, ExtensionContext } from "vscode";
 
-export function activate(context: vscode.ExtensionContext) {
-    console.log(
-        'Congratulations, your extension "cpp-ultimate" is now active!'
-    );
+export function activate(context: ExtensionContext) {
+    console.log("[C++ Ultimate] is now active!");
 
     context.subscriptions.push(
-        vscode.commands.registerCommand(
-            "cpp-ultimate.createClass",
-            createClass
-        ),
-        vscode.commands.registerCommand(
-            "cpp-ultimate.createHeader",
-            createHeader
-        ),
-        vscode.commands.registerCommand(
-            "cpp-ultimate.createSource",
-            createSource
-        ),
-        vscode.commands.registerCommand(
-            "cpp-ultimate.createCMakeLists",
-            createCMakeLists
-        ),
-        vscode.commands.registerCommand(
-            "cpp-ultimate.createClangFormat",
-            createClangFormat
-        ),
+        // Commands
+        commands.registerCommand("cpp-ultimate.createClass", createClass),
+        commands.registerCommand("cpp-ultimate.createHeader", createHeader),
+        commands.registerCommand("cpp-ultimate.createSource", createSource),
+        commands.registerCommand("cpp-ultimate.createCMakeLists", createCMakeLists),
+        commands.registerCommand("cpp-ultimate.createClangFormat", createClangFormat),
 
+        // Snippets
         headerSnippet,
         sequencesSnippet,
         keywordsSnippets,

@@ -14,25 +14,12 @@ async function createClass(context: any) {
             if (!classname) {
                 return;
             }
-            var filename = classname.replace(
-                /[A-Z]/g,
-                (letter) => `_${letter.toLowerCase()}`
-            );
+            var filename = classname.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
             if (filename[0] === "_") {
                 filename = filename.slice(1, filename.length);
             }
-            createFile(
-                context,
-                filename,
-                getHeaderExtension(),
-                getHeaderClassTemplate(filename, classname)
-            );
-            createFile(
-                context,
-                filename,
-                getSourceExtension(),
-                getSourceClassTemplate(filename)
-            );
+            createFile(context, filename, getHeaderExtension(), getHeaderClassTemplate(filename, classname));
+            createFile(context, filename, getSourceExtension(), getSourceClassTemplate(filename));
         });
 }
 
@@ -46,12 +33,7 @@ async function createHeader(context: any) {
             if (!filename) {
                 return;
             }
-            createFile(
-                context,
-                filename,
-                getHeaderExtension(),
-                getHeaderTemplate(filename)
-            );
+            createFile(context, filename, getHeaderExtension(), getHeaderTemplate(filename));
         });
 }
 
@@ -91,41 +73,24 @@ async function createClangFormat(context: any) {
 }
 
 function getHeaderExtension(): string {
-    return (
-        vscode.workspace
-            .getConfiguration()
-            .get("cpp-ultimate.files.header-extension") || "hpp"
-    );
+    return vscode.workspace.getConfiguration().get("cpp-ultimate.files.header-extension") || "hpp";
 }
 
 function getSourceExtension(): string {
-    return (
-        vscode.workspace
-            .getConfiguration()
-            .get("cpp-ultimate.files.source-extension") || "cpp"
-    );
+    return vscode.workspace.getConfiguration().get("cpp-ultimate.files.source-extension") || "cpp";
 }
 
 function getClangFormatGistID(): string {
     return (
-        vscode.workspace
-            .getConfiguration()
-            .get("cpp-ultimate.clang-format.gist-id") ||
+        vscode.workspace.getConfiguration().get("cpp-ultimate.clang-format.gist-id") ||
         "28ca0c7533aac5a5185b5f2651c35e8a"
     );
 }
 
-function createFile(
-    context: any,
-    filename: string,
-    extension: string,
-    content: string
-) {
+function createFile(context: any, filename: string, extension: string, content: string) {
     const path = context.path + "/" + filename + "." + extension;
     if (existsSync(path)) {
-        vscode.window.showInformationMessage(
-            "The file " + filename + "." + extension + " already exists."
-        );
+        vscode.window.showInformationMessage("The file " + filename + "." + extension + " already exists.");
         return;
     }
     const file = vscode.Uri.file(path);
@@ -192,9 +157,7 @@ async function getClangFormatTemplate(): Promise<string> {
             .then((response) => {
                 console.log(response);
                 if (response.data.files) {
-                    resolve(
-                        response.data.files[".clang-format"]?.content || error
-                    );
+                    resolve(response.data.files[".clang-format"]?.content || error);
                 } else {
                     reject(error);
                 }
@@ -203,10 +166,4 @@ async function getClangFormatTemplate(): Promise<string> {
     });
 }
 
-export {
-    createClass,
-    createHeader,
-    createSource,
-    createCMakeLists,
-    createClangFormat,
-};
+export { createClass, createHeader, createSource, createCMakeLists, createClangFormat };
