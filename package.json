@@ -37,23 +37,23 @@
         "commands": [
             {
                 "command": "cpp-ultimate.createClass",
-                "title": "Create C++ class"
+                "title": "[C++] Create class"
             },
             {
                 "command": "cpp-ultimate.createHeader",
-                "title": "Create C++ header file"
+                "title": "[C++] Create header file"
             },
             {
                 "command": "cpp-ultimate.createSource",
-                "title": "Create C++ source file"
+                "title": "[C++] Create source file"
             },
             {
                 "command": "cpp-ultimate.createCMakeLists",
-                "title": "Create CMakeLists.txt"
+                "title": "[C++] Create CMakeLists.txt"
             },
             {
                 "command": "cpp-ultimate.createClangFormat",
-                "title": "Create .clang-format"
+                "title": "[C++] Create .clang-format"
             }
         ],
         "menus": {
@@ -61,7 +61,7 @@
                 {
                     "when": "explorerResourceIsFolder",
                     "command": "cpp-ultimate.createClass",
-                    "group": "cpp-ultimate-class"
+                    "group": "cpp-ultimate-files"
                 },
                 {
                     "when": "explorerResourceIsFolder",
@@ -76,12 +76,12 @@
                 {
                     "when": "explorerResourceIsFolder",
                     "command": "cpp-ultimate.createCMakeLists",
-                    "group": "cpp-ultimate-cmake"
+                    "group": "cpp-ultimate-config"
                 },
                 {
                     "when": "explorerResourceIsFolder",
                     "command": "cpp-ultimate.createClangFormat",
-                    "group": "cpp-ultimate-format"
+                    "group": "cpp-ultimate-config"
                 }
             ]
         },

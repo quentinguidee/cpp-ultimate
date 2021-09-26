@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.6.0] - 2021-09-26
+
+- Improve menu readability
+
 ## [0.5.0] - 2021-09-25
 
 - Improved keywords with auto space
