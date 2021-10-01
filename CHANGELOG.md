@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.6.1] - 2021-10-01
+
+- Add typedef and struct to C snippets
+
 ## [0.6.0] - 2021-09-26
 
 - Improve menu readability
