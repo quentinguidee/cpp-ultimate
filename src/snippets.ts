@@ -54,6 +54,8 @@ const keywordsSnippets = languages.registerCompletionItemProvider(["c", "cpp"], 
             "void",
             "extern",
             "auto",
+            "typedef",
+            "struct",
         ];
 
         let items: CompletionItem[] = keywords.map((keyword) => {
@@ -86,7 +88,6 @@ const keywordsCppSpecificSnippets = languages.registerCompletionItemProvider(["c
             "char32_t",
             // keywords
             "new",
-            "typedef",
         ];
 
         let items: CompletionItem[] = keywords.map((keyword) => {
