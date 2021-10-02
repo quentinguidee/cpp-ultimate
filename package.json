@@ -54,6 +54,17 @@
             {
                 "command": "cpp-ultimate.createClangFormat",
                 "title": "[C++] Create .clang-format"
+            },
+            {
+                "command": "cpp-ultimate.switch-header-source",
+                "title": "Switch between .hpp/.cpp"
+            }
+        ],
+        "keybindings": [
+            {
+                "key": "alt+o",
+                "command": "cpp-ultimate.switch-header-source",
+                "when": "editorIsOpen"
             }
         ],
         "menus": {
