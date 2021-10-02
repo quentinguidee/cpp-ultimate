@@ -1,5 +1,5 @@
 import { createClass, createHeader, createSource, createCMakeLists, createClangFormat } from "./createFiles";
-import { headerSnippet, keywordsCppSpecificSnippets, keywordsSnippets, sequencesSnippet } from "./snippets";
+import { headerSnippet, sequencesSnippet } from "./snippets";
 import { commands, ExtensionContext, window as Window } from "vscode";
 import { LSPContext } from "./lsp/setup";
 
@@ -23,9 +23,7 @@ export function activate(context: ExtensionContext) {
 
         // Snippets
         headerSnippet,
-        sequencesSnippet,
-        keywordsSnippets,
-        keywordsCppSpecificSnippets
+        sequencesSnippet
     );
 
     lspContext.activate(context.globalStoragePath, outputChannel);

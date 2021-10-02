@@ -5,6 +5,10 @@ import {
     Disposable,
     OutputChannel,
     TextDocument,
+    CompletionList,
+    CompletionItem,
+    CompletionItemKind,
+    SnippetString,
 } from "vscode";
 
 import {
@@ -61,6 +65,25 @@ export class LSPContext implements Disposable {
             documentSelector,
             outputChannel,
             revealOutputChannelOn: RevealOutputChannelOn.Never,
+            middleware: {
+                provideCompletionItem: async (document, position, context, token, next) => {
+                    let list = (await next(document, position, context, token)) as CompletionList<CompletionItem>;
+                    let items = list.items.map((item) => {
+                        const trailingSpace = item.kind === CompletionItemKind.Keyword;
+                        const label = item.label.toString();
+                        const insertTextSnippet = item.insertText as SnippetString;
+                        const insertText = insertTextSnippet.value;
+                        if (label[0] === " ") {
+                            item.label = label.substring(1);
+                        }
+                        if (trailingSpace) {
+                            item.insertText = insertText + " ";
+                        }
+                        return item;
+                    });
+                    return new CompletionList(items);
+                },
+            },
         };
 
         this.client = new Client("C++ Ultimate language server", serverOptions, clientOptions);
