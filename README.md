@@ -14,10 +14,8 @@ Ultimate extensions are a group of extensions allowing faster coding in VSCode. 
 
 ## Features
 
-- C/C++ snippets (with auto-space for keywords)
-
-<img width="360" alt="snippets" src="https://user-images.githubusercontent.com/12123721/134800950-00f84e72-7f11-4c2d-816e-536371a2b332.gif" />
-
+- Language server (Clangd) running in background
+- C/C++ snippets from clangd and slightly improved (trailing space for keywords, remove hints...)
 - Create C++ class/header/source
 - Create CMakeLists.txt file
 - Create .clang-format with a gist template
@@ -40,7 +38,6 @@ Those settings from VSCode can improve your typing experience with C++ Ultimate 
 ```json
 {
     "editor.suggest.snippetsPreventQuickSuggestions": false,
-    "C_Cpp.autocompleteAddParentheses": true,
 }
 ```
 
