@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.7.0] - 2021-10-02
+
+- Install Clangd for the language server
+- Improve autocomplete from Clangd in C++ Ultimate
+- Remove deprecated snippets
+
 ## [0.6.1] - 2021-10-01
 
 - Add typedef and struct to C snippets
