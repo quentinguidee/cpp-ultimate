@@ -69,7 +69,8 @@ export class LSPContext implements Disposable {
                 provideCompletionItem: async (document, position, context, token, next) => {
                     let list = (await next(document, position, context, token)) as CompletionList<CompletionItem>;
                     let items = list.items.map((item) => {
-                        const trailingSpace = item.kind === CompletionItemKind.Keyword;
+                        const trailingSpace =
+                            item.kind === CompletionItemKind.Keyword || item.kind === CompletionItemKind.Interface;
                         const label = item.label.toString();
                         const insertTextSnippet = item.insertText as SnippetString;
                         const insertText = insertTextSnippet.value;
