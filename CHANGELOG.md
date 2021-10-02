@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.7.1] - 2021-10-02
+
+- Switch header/source
+
 ## [0.7.0] - 2021-10-02
 
 - Install Clangd for the language server
