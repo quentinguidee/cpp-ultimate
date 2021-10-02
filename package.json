@@ -16,7 +16,7 @@
     "version": "0.6.1",
     "license": "MIT",
     "engines": {
-        "vscode": "^1.50.0"
+        "vscode": "^1.52.0"
     },
     "categories": [
         "Other",
@@ -89,6 +89,10 @@
             {
                 "title": "C++ Ultimate",
                 "properties": {
+                    "cpp-ultimate.clangd-path": {
+                        "type": "string",
+                        "description": "The clangd path."
+                    },
                     "cpp-ultimate.files.header-extension": {
                         "type": "string",
                         "enum": [
@@ -135,19 +139,21 @@
         "test": "node ./out/test/runTest.js"
     },
     "devDependencies": {
-        "@types/vscode": "^1.50.0",
         "@types/glob": "^7.1.3",
         "@types/mocha": "^8.0.0",
         "@types/node": "^12.11.7",
-        "eslint": "^7.9.0",
+        "@types/vscode": "^1.52.0",
         "@typescript-eslint/eslint-plugin": "^4.1.1",
         "@typescript-eslint/parser": "^4.1.1",
+        "eslint": "^7.9.0",
         "glob": "^7.1.6",
         "mocha": "^8.1.3",
         "typescript": "^4.0.2",
         "vscode-test": "^1.4.0"
     },
     "dependencies": {
-        "@octokit/core": "^3.3.1"
+        "@clangd/install": "^0.1.4",
+        "@octokit/core": "^3.3.1",
+        "vscode-languageclient": "^7.1.0-next.2"
     }
 }

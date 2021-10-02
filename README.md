@@ -45,4 +45,5 @@ Those settings from VSCode can improve your typing experience with C++ Ultimate 
 
 ## License
 
-This extension is released under the [MIT License](./LICENSE.md)
+- This extension is released under the [MIT License](./LICENSE.md).
+- Some parts of the code are inspired from [vscode-clangd](https://github.com/clangd/vscode-clangd), also released under the [MIT License](https://github.com/clangd/vscode-clangd/blob/master/LICENSE).
