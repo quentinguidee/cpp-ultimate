@@ -1,14 +1,4 @@
 {
-    "Include library": {
-        "scope": "c,cpp",
-        "prefix": "#include <file>",
-        "body": "#include <${1}>$0"
-    },
-    "Include file": {
-        "scope": "c,cpp",
-        "prefix": "#include \"file\"",
-        "body": "#include \"${1}\"$0"
-    },
     "main": {
         "scope": "c,cpp",
         "prefix": "main()",
@@ -18,40 +8,5 @@
         "scope": "c,cpp",
         "prefix": "main(argc, argv)",
         "body": "int main(int argc, char* argv[]) {$0}"
-    },
-    "preprocessor.define": {
-        "scope": "c,cpp",
-        "prefix": "#define",
-        "body": "#define $0"
-    },
-    "preprocessor.if": {
-        "scope": "c,cpp",
-        "prefix": "#if",
-        "body": "#if $0"
-    },
-    "preprocessor.elif": {
-        "scope": "c,cpp",
-        "prefix": "#elif",
-        "body": "#elif $0"
-    },
-    "preprocessor.else": {
-        "scope": "c,cpp",
-        "prefix": "#else",
-        "body": "#else$0"
-    },
-    "preprocessor.endif": {
-        "scope": "c,cpp",
-        "prefix": "#endif",
-        "body": "#endif$0"
-    },
-    "preprocessor.ifdef": {
-        "scope": "c,cpp",
-        "prefix": "#ifdef",
-        "body": "#ifdef $0"
-    },
-    "preprocessor.ifndef": {
-        "scope": "c,cpp",
-        "prefix": "#ifndef",
-        "body": "#ifndef $0"
     }
 }
