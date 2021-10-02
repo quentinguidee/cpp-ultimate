@@ -28,6 +28,7 @@ Ultimate extensions are a group of extensions allowing faster coding in VSCode. 
 
 This extension contributes the following settings:
 
+- `cpp-ultimate.hints-in-snippets`: Show hints in snippets. Disabled by default.
 - `cpp-ultimate.clang-format.gist-id`: Gist ID of your clang-format file. The file must be named .clang-format to work.
 - `cpp-ultimate.files.header-extension`: header extension (.h, .hxx, .hpp)
 - `cpp-ultimate.files.source-extension`: source extension (.c, .cxx, .cpp)

@@ -9,6 +9,9 @@ import {
     CompletionItem,
     CompletionItemKind,
     SnippetString,
+    Position,
+    CompletionContext,
+    CompletionItemLabel,
 } from "vscode";
 
 import {
@@ -19,6 +22,7 @@ import {
     MessageSignature,
     ResponseError,
     CancellationToken,
+    ProvideCompletionItemsSignature,
 } from "vscode-languageclient/node";
 
 import { getClangdPath } from "./path";
@@ -50,6 +54,42 @@ class Client extends LanguageClient {
 export class LSPContext implements Disposable {
     client!: Client;
 
+    async provideCompletionItem(
+        document: TextDocument,
+        position: Position,
+        context: CompletionContext,
+        token: CancellationToken,
+        next: ProvideCompletionItemsSignature
+    ) {
+        let list = (await next(document, position, context, token)) as CompletionList<CompletionItem>;
+        let items = list.items.map((item) => {
+            const appendSpace = item.kind === CompletionItemKind.Keyword || item.kind === CompletionItemKind.Interface;
+
+            const hideHints = !Workspace.getConfiguration().get("cpp-ultimate.hints-in-snippets");
+
+            const label = item.label as string;
+            const insertText = item.insertText as SnippetString;
+
+            // Label
+            if (label[0] === " ") {
+                item.label = label.substring(1);
+            }
+
+            // Insert text
+            if (hideHints) {
+                insertText.value = insertText.value.replace(/:.*?(?=})/g, "");
+                insertText.value = insertText.value.replace(/\n|\r/g, "");
+            }
+
+            if (appendSpace) {
+                insertText.value = insertText.value + " ";
+            }
+
+            return item;
+        });
+        return new CompletionList(items);
+    }
+
     async activate(globalStoragePath: string, outputChannel: OutputChannel) {
         const clangdPath = await getClangdPath(globalStoragePath);
         if (!clangdPath) {
@@ -66,24 +106,7 @@ export class LSPContext implements Disposable {
             outputChannel,
             revealOutputChannelOn: RevealOutputChannelOn.Never,
             middleware: {
-                provideCompletionItem: async (document, position, context, token, next) => {
-                    let list = (await next(document, position, context, token)) as CompletionList<CompletionItem>;
-                    let items = list.items.map((item) => {
-                        const trailingSpace =
-                            item.kind === CompletionItemKind.Keyword || item.kind === CompletionItemKind.Interface;
-                        const label = item.label.toString();
-                        const insertTextSnippet = item.insertText as SnippetString;
-                        const insertText = insertTextSnippet.value;
-                        if (label[0] === " ") {
-                            item.label = label.substring(1);
-                        }
-                        if (trailingSpace) {
-                            item.insertText = insertText + " ";
-                        }
-                        return item;
-                    });
-                    return new CompletionList(items);
-                },
+                provideCompletionItem: this.provideCompletionItem,
             },
         };
 

@@ -93,6 +93,11 @@
                         "type": "string",
                         "description": "The clangd path."
                     },
+                    "cpp-ultimate.hints-in-snippets": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Show hints in snippets"
+                    },
                     "cpp-ultimate.files.header-extension": {
                         "type": "string",
                         "enum": [
