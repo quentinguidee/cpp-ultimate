@@ -16,21 +16,4 @@ const headerSnippet = languages.registerCompletionItemProvider(["c", "cpp"], {
     },
 });
 
-const sequencesSnippet = languages.registerCompletionItemProvider(["c", "cpp"], {
-    provideCompletionItems(document: TextDocument, position: Position) {
-        const keywords = ["while", "if", "for"];
-
-        const items = keywords.map((keyword) => {
-            const item = new CompletionItem(keyword, CompletionItemKind.Snippet);
-
-            item.insertText = new SnippetString(`${keyword} ($1) $0`);
-            item.preselect = true;
-
-            return item;
-        });
-
-        return items;
-    },
-});
-
-export { headerSnippet, sequencesSnippet };
+export { headerSnippet };

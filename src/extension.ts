@@ -1,5 +1,5 @@
 import { createClass, createHeader, createSource, createCMakeLists, createClangFormat } from "./createFiles";
-import { headerSnippet, sequencesSnippet } from "./snippets";
+import { headerSnippet } from "./snippets";
 import { commands, ExtensionContext, window as Window } from "vscode";
 import { LSPContext } from "./lsp/setup";
 
@@ -22,8 +22,7 @@ export function activate(context: ExtensionContext) {
         commands.registerCommand("cpp-ultimate.createClangFormat", createClangFormat),
 
         // Snippets
-        headerSnippet,
-        sequencesSnippet
+        headerSnippet
     );
 
     lspContext.activate(context.globalStoragePath, outputChannel);
