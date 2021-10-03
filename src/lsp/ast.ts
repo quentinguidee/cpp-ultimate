@@ -1,5 +1,5 @@
-import { window as Window, workspace as Workspace, Uri } from "vscode";
-import { LanguageClient, RequestType, TextDocumentIdentifier, Range } from "vscode-languageclient/node";
+import { window as Window, TextDocument } from "vscode";
+import { RequestType, TextDocumentIdentifier, Range } from "vscode-languageclient/node";
 import { LSPContext } from "./setup";
 
 interface AstParams {
@@ -7,7 +7,7 @@ interface AstParams {
     range: Range;
 }
 
-interface AstNode {
+export interface AstNode {
     role: string;
     kind: string;
     detail?: string;
@@ -18,17 +18,17 @@ interface AstNode {
 
 const astRequestType = new RequestType<AstParams, AstNode | null, void>("textDocument/ast");
 
-export async function getAst(context: LSPContext, range: Range): Promise<void> {
+export async function getAst(context: LSPContext, document: TextDocument, range: Range): Promise<AstNode | null> {
     if (!Window.activeTextEditor) {
-        return;
+        return null;
     }
 
-    const activePath = Window.activeTextEditor.document.fileName;
-    const activeUri = Uri.file(activePath);
-    const activeDocumentIdentifier = TextDocumentIdentifier.create(activeUri.toString());
+    const documentIdentifier = TextDocumentIdentifier.create(document.uri.toString());
 
     const response = await context.client.sendRequest(astRequestType, {
-        textDocument: activeDocumentIdentifier,
+        textDocument: documentIdentifier,
         range: range,
     });
+
+    return response;
 }

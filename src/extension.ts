@@ -1,8 +1,9 @@
 import { createClass, createHeader, createSource, createCMakeLists, createClangFormat } from "./createFiles";
 import { headerSnippet } from "./snippets";
-import { commands, ExtensionContext, window as Window } from "vscode";
+import { CodeActionKind, commands, ExtensionContext, languages, window as Window } from "vscode";
 import { LSPContext } from "./lsp/setup";
 import { switchHeaderSource } from "./lsp/switchHeaderSource";
+import { GenerateCodeActionProvider } from "./codeActions";
 
 export function activate(context: ExtensionContext) {
     const outputChannel = Window.createOutputChannel("cpp-ultimate");
@@ -26,7 +27,12 @@ export function activate(context: ExtensionContext) {
         commands.registerCommand("cpp-ultimate.switch-header-source", _switchHeaderSource),
 
         // Snippets
-        headerSnippet
+        headerSnippet,
+
+        // CodeActions
+        languages.registerCodeActionsProvider("cpp", new GenerateCodeActionProvider(lspContext), {
+            providedCodeActionKinds: [CodeActionKind.Refactor],
+        })
     );
 
     lspContext.activate(context.globalStoragePath, outputChannel);
