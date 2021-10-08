@@ -46,11 +46,11 @@ export class GenerateCodeActionProvider implements CodeActionProvider {
     }
 
     private getConstructorContent(className: string): string {
-        return `${className}() = default;`;
+        return `${className}() {}`;
     }
 
     private getDestructorContent(className: string): string {
-        return `~${className}() = default;`;
+        return `~${className}() {}`;
     }
 
     private generateConstructor(ast: AstNode, document: TextDocument) {
