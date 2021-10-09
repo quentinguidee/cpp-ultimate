@@ -16,12 +16,16 @@ Ultimate extensions are a group of extensions allowing faster coding in VSCode. 
 
 - Language server (Clangd) running in background
 - C/C++ snippets from clangd and slightly improved (trailing space for keywords, remove hints...)
+- Constructor/destructor
+
+<img width="400" alt="constructor" src="https://user-images.githubusercontent.com/12123721/136666837-be333682-68f5-4b7e-ab2e-13f696b2d626.gif">
+
 - Switch between header/source
 - Create C++ class/header/source
 - Create CMakeLists.txt file
 - Create .clang-format with a gist template
 
-<img width="360" alt="Capture d’écran 2021-09-26 à 10 57 08" src="https://user-images.githubusercontent.com/12123721/134801001-94cbeb93-543e-449a-9bfd-7712c7762e4b.png">
+<img width="400" alt="menus" src="https://user-images.githubusercontent.com/12123721/134801001-94cbeb93-543e-449a-9bfd-7712c7762e4b.png">
 
 ## Extension Settings
 

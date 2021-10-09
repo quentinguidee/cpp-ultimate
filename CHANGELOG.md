@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.1] - 2021-10-09
+
+- Add constructor parameters picker
+
 ## [0.8.0] - 2021-10-09
 
 - Autocomplete constructor/destructor with access modifier
