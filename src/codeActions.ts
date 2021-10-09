@@ -15,7 +15,7 @@ import {
 import { AstNode, getAst } from "./lsp/ast";
 
 import { LSPContext } from "./lsp/setup";
-import { insertNewLineParams, insertNewLinesParams } from "./utils/documentEdition";
+import { AccessModifier, insertNewLineParams, insertNewLinesParams } from "./utils/documentEdition";
 
 export class GenerateCodeActionProvider implements CodeActionProvider {
     constructor(private context: LSPContext) {}
@@ -57,7 +57,7 @@ export class GenerateCodeActionProvider implements CodeActionProvider {
         const action = new CodeAction("Constructor", CodeActionKind.Refactor);
 
         const content = this.getConstructorContent(ast.detail!);
-        const [uri, position, text] = insertNewLineParams(ast, document, content);
+        const [uri, position, text] = insertNewLineParams(ast, document, content, "public");
 
         action.edit = new WorkspaceEdit();
         action.edit.insert(uri, position, text);
@@ -69,7 +69,7 @@ export class GenerateCodeActionProvider implements CodeActionProvider {
         const action = new CodeAction("Destructor", CodeActionKind.Refactor);
 
         const content = this.getDestructorContent(ast.detail!);
-        const [uri, position, text] = insertNewLineParams(ast, document, content);
+        const [uri, position, text] = insertNewLineParams(ast, document, content, "public");
 
         action.edit = new WorkspaceEdit();
         action.edit.insert(uri, position, text);
@@ -84,7 +84,7 @@ export class GenerateCodeActionProvider implements CodeActionProvider {
         const constructor = this.getConstructorContent(className);
         const destructor = this.getDestructorContent(className);
 
-        const [uri, position, text] = insertNewLinesParams(ast, document, [constructor, destructor]);
+        const [uri, position, text] = insertNewLinesParams(ast, document, [constructor, destructor], "public");
 
         action.edit = new WorkspaceEdit();
         action.edit.insert(uri, position, text);
