@@ -11,7 +11,6 @@ import {
     SnippetString,
     Position,
     CompletionContext,
-    CompletionItemLabel,
 } from "vscode";
 
 import {
@@ -92,9 +91,7 @@ export class LSPContext implements Disposable {
 
     async activate(globalStoragePath: string, outputChannel: OutputChannel) {
         const clangdPath = await getClangdPath(globalStoragePath);
-        if (!clangdPath) {
-            return;
-        }
+        if (!clangdPath) return;
 
         const serverOptions: ServerOptions = {
             command: clangdPath,

@@ -6,9 +6,7 @@ const switchHeaderSourceRequest = new RequestType<TextDocumentIdentifier, string
 );
 
 export async function switchHeaderSource(client: LanguageClient): Promise<void> {
-    if (!Window.activeTextEditor) {
-        return;
-    }
+    if (!Window.activeTextEditor) return;
 
     const activePath = Window.activeTextEditor.document.fileName;
     const activeUri = Uri.file(activePath);

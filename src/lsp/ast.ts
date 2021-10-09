@@ -19,9 +19,7 @@ export interface AstNode {
 const astRequestType = new RequestType<AstParams, AstNode | null, void>("textDocument/ast");
 
 export async function getAst(context: LSPContext, document: TextDocument, range: Range): Promise<AstNode | null> {
-    if (!Window.activeTextEditor) {
-        return null;
-    }
+    if (!Window.activeTextEditor) return null;
 
     const documentIdentifier = TextDocumentIdentifier.create(document.uri.toString());
 

@@ -5,16 +5,15 @@ import {
     CodeActionKind,
     CodeActionProvider,
     Command,
-    Position,
     Range,
     Selection,
     TextDocument,
-    workspace,
     WorkspaceEdit,
 } from "vscode";
 import { AstNode, getAst } from "./lsp/ast";
 
 import { LSPContext } from "./lsp/setup";
+import { getHierarchy } from "./lsp/typeHierarchy";
 import { AccessModifier, insertNewLineParams, insertNewLinesParams } from "./utils/documentEdition";
 
 export class GenerateCodeActionProvider implements CodeActionProvider {
@@ -29,10 +28,7 @@ export class GenerateCodeActionProvider implements CodeActionProvider {
         let items = [];
 
         const ast = await getAst(this.context, document, range);
-        console.log(ast);
-        if (ast === null) {
-            return [];
-        }
+        if (!ast) return [];
 
         if (ast.kind === "CXXRecord") {
             items.push(

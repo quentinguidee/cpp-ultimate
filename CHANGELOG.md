@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.0] - /
+
+- Autocomplete constructor/destructor
+
 ## [0.7.1] - 2021-10-02
 
 - Switch header/source

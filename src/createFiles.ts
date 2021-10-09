@@ -11,13 +11,13 @@ async function createClass(context: any) {
             placeHolder: "Class",
         })
         .then((classname) => {
-            if (!classname) {
-                return;
-            }
+            if (!classname) return;
+
             var filename = classname.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
             if (filename[0] === "_") {
                 filename = filename.slice(1, filename.length);
             }
+
             createFile(context, filename, getHeaderExtension(), getHeaderClassTemplate(filename, classname));
             createFile(context, filename, getSourceExtension(), getSourceClassTemplate(filename));
         });
@@ -30,9 +30,7 @@ async function createHeader(context: any) {
             placeHolder: "Filename",
         })
         .then((filename) => {
-            if (!filename) {
-                return;
-            }
+            if (!filename) return;
             createFile(context, filename, getHeaderExtension(), getHeaderTemplate(filename));
         });
 }
@@ -44,9 +42,7 @@ async function createSource(context: any) {
             placeHolder: "Filename",
         })
         .then((filename) => {
-            if (!filename) {
-                return;
-            }
+            if (!filename) return;
             createFile(context, filename, getSourceExtension(), "");
         });
 }

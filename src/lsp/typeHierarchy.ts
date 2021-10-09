@@ -43,9 +43,7 @@ export async function getHierarchy(
     document: TextDocument,
     range: Range | Selection
 ): Promise<void> {
-    if (!Window.activeTextEditor) {
-        return;
-    }
+    if (!Window.activeTextEditor) return;
 
     const documentIdentifier = TextDocumentIdentifier.create(document.uri.toString());
 

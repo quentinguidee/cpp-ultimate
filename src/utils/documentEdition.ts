@@ -12,9 +12,7 @@ export function getLineAccessModifier(ast: AstNode, accessModifier: AccessModifi
     const node = ast.children?.find((node) => {
         return node.kind === "AccessSpec" && node.arcana?.split(" ").splice(-1)[0] === accessModifier;
     });
-    if (node === undefined) {
-        return -1;
-    }
+    if (node === undefined) return -1;
     return node?.range?.end.line ?? -1;
 }
 
@@ -22,9 +20,7 @@ export function getLineOpeningBracket(document: TextDocument, searchRange: Range
     let line = searchRange.start.line;
     while (line <= searchRange.end.line) {
         const index = document.lineAt(line).text.indexOf("{");
-        if (index >= 0) {
-            return line;
-        }
+        if (index >= 0) return line;
         line++;
     }
     return -1;
