@@ -1,8 +1,8 @@
 # Changelog
 
-## [0.8.0] - /
+## [0.8.0] - 2021-10-09
 
-- Autocomplete constructor/destructor
+- Autocomplete constructor/destructor with access modifier
 
 ## [0.7.1] - 2021-10-02
 
