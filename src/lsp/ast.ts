@@ -18,8 +18,13 @@ export interface AstNode {
 
 const astRequestType = new RequestType<AstParams, AstNode | null, void>("textDocument/ast");
 
-export async function getAst(context: LSPContext, document: TextDocument, range: Range): Promise<AstNode | null> {
+export async function getAst(context: LSPContext, document?: TextDocument, range?: Range): Promise<AstNode | null> {
     if (!Window.activeTextEditor) return null;
+
+    const editor = Window.activeTextEditor;
+
+    if (!document) document = editor.document;
+    if (!range) range = editor.selection;
 
     const documentIdentifier = TextDocumentIdentifier.create(document.uri.toString());
 

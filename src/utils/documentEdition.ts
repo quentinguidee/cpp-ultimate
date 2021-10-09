@@ -1,7 +1,12 @@
-import { Position, Range, TextDocument, TextLine, Uri } from "vscode";
+import { Position, Range, TextDocument, TextLine, Uri, window as Window } from "vscode";
 import { AstNode } from "../lsp/ast";
 
 export type AccessModifier = "private" | "public";
+export type Field = {
+    accessModifier: AccessModifier;
+    type: string;
+    name: string;
+};
 
 export function getTabs(line: TextLine): string {
     const firstCharacterIndex = line.firstNonWhitespaceCharacterIndex;
@@ -26,12 +31,52 @@ export function getLineOpeningBracket(document: TextDocument, searchRange: Range
     return -1;
 }
 
+export function getFields(ast: AstNode) {
+    let currentAccessModifier: AccessModifier = "private";
+    let fields: Field[] = [];
+
+    const getType = (node: AstNode): string => {
+        const child = node.children![0];
+
+        if (!child.children) {
+            return child.detail!;
+        }
+
+        let children = child.children;
+        if (children) {
+            if (children.length === 1) return children[0].detail!;
+            return children.map((n) => n.detail).join("");
+        }
+
+        // TODO: Ask to report this bug with popup.
+        return "PLEASE_REPORT_THIS_BUG";
+    };
+
+    ast.children?.forEach((node) => {
+        if (node.kind === "Field") {
+            fields.push({
+                accessModifier: currentAccessModifier,
+                type: getType(node),
+                name: node.detail!,
+            });
+            return;
+        }
+
+        if (node.kind === "AccessSpec") {
+            currentAccessModifier = node.arcana?.split(" ").splice(-1)[0]! as AccessModifier;
+            return;
+        }
+    });
+
+    return fields;
+}
+
 export function insertNewLineParams(
     ast: AstNode,
     document: TextDocument,
     content: string,
     accessModifier: AccessModifier
-): [Uri, Position, string] {
+): [Position, string, Uri] {
     return insertNewLinesParams(ast, document, [content], accessModifier);
 }
 
@@ -40,7 +85,7 @@ export function insertNewLinesParams(
     document: TextDocument,
     content: string[],
     accessModifier: AccessModifier
-): [Uri, Position, string] {
+): [Position, string, Uri] {
     const startLine = ast.range?.start.line!;
     const endLine = ast.range?.end.line!;
 
@@ -50,7 +95,6 @@ export function insertNewLinesParams(
     let insertLine = getLineAccessModifier(ast, accessModifier) + 1;
     let text = "";
     if (insertLine === 0) {
-        console.log({ document });
         insertLine = getLineOpeningBracket(document, new Range(startLine, 0, endLine, 0)) + 1;
         text = `${tabs}${accessModifier}:\n`;
     }
@@ -62,5 +106,5 @@ export function insertNewLinesParams(
     const uri = document.uri;
     const position = new Position(insertLine!, 0);
 
-    return [uri, position, text];
+    return [position, text, uri];
 }

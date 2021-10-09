@@ -8,13 +8,12 @@ import {
     Range,
     Selection,
     TextDocument,
-    WorkspaceEdit,
+    window as Window,
 } from "vscode";
 import { AstNode, getAst } from "./lsp/ast";
 
 import { LSPContext } from "./lsp/setup";
-import { getHierarchy } from "./lsp/typeHierarchy";
-import { AccessModifier, insertNewLineParams, insertNewLinesParams } from "./utils/documentEdition";
+import { Field, getFields, insertNewLineParams, insertNewLinesParams } from "./utils/documentEdition";
 
 export class GenerateCodeActionProvider implements CodeActionProvider {
     constructor(private context: LSPContext) {}
@@ -31,60 +30,110 @@ export class GenerateCodeActionProvider implements CodeActionProvider {
         if (!ast) return [];
 
         if (ast.kind === "CXXRecord") {
-            items.push(
-                this.generateConstructor(ast, document),
-                this.generateDestructor(ast, document),
-                this.generateConstructorDestructor(ast, document)
-            );
+            items.push(this.generateConstructor(), this.generateDestructor(), this.generateConstructorDestructor());
         }
 
         return items;
     }
 
-    private getConstructorContent(className: string): string {
-        return `${className}() {}`;
-    }
-
-    private getDestructorContent(className: string): string {
-        return `~${className}() {}`;
-    }
-
-    private generateConstructor(ast: AstNode, document: TextDocument) {
+    private generateConstructor() {
         const action = new CodeAction("Constructor", CodeActionKind.Refactor);
-
-        const content = this.getConstructorContent(ast.detail!);
-        const [uri, position, text] = insertNewLineParams(ast, document, content, "public");
-
-        action.edit = new WorkspaceEdit();
-        action.edit.insert(uri, position, text);
-
+        action.command = {
+            title: "Constructor",
+            command: "cpp-ultimate.generate-constructor",
+        };
         return action;
     }
 
-    private generateDestructor(ast: AstNode, document: TextDocument) {
+    private generateDestructor() {
         const action = new CodeAction("Destructor", CodeActionKind.Refactor);
-
-        const content = this.getDestructorContent(ast.detail!);
-        const [uri, position, text] = insertNewLineParams(ast, document, content, "public");
-
-        action.edit = new WorkspaceEdit();
-        action.edit.insert(uri, position, text);
-
+        action.command = {
+            title: "Destructor",
+            command: "cpp-ultimate.generate-destructor",
+        };
         return action;
     }
 
-    private generateConstructorDestructor(ast: AstNode, document: TextDocument) {
-        const action = new CodeAction("Constructor + destructor");
-
-        const className = ast.detail!;
-        const constructor = this.getConstructorContent(className);
-        const destructor = this.getDestructorContent(className);
-
-        const [uri, position, text] = insertNewLinesParams(ast, document, [constructor, destructor], "public");
-
-        action.edit = new WorkspaceEdit();
-        action.edit.insert(uri, position, text);
-
+    private generateConstructorDestructor() {
+        const action = new CodeAction("Constructor + destructor", CodeActionKind.Refactor);
+        action.command = {
+            title: "Constructor + destructor",
+            command: "cpp-ultimate.generate-constructor-destructor",
+        };
         return action;
     }
+}
+
+function getConstructorContent(className: string, params: Field[]): string {
+    const paramsInside = params.map((field) => `${field.type} ${field.name}`).join(", ");
+    let paramsOutside = "";
+    if (params.length !== 0) {
+        paramsOutside = " : ";
+        paramsOutside += params.map((field) => `${field.name}(${field.name})`).join(", ");
+    }
+    return `${className}(${paramsInside})${paramsOutside} {}`;
+}
+
+function getDestructorContent(className: string): string {
+    return `~${className}() {}`;
+}
+
+function getConstructorDestructorContent(className: string, params: Field[]): string[] {
+    return [getConstructorContent(className, params), getDestructorContent(className)];
+}
+
+async function showQuickPickFields(ast: AstNode) {
+    const fields = getFields(ast);
+    const choices = await Window.showQuickPick(
+        fields.map((f) => f.name),
+        { canPickMany: true, title: "Fields to include" }
+    );
+    return fields.filter((field) => choices?.includes(field.name));
+}
+
+export async function generateConstructor(context: LSPContext) {
+    if (!Window.activeTextEditor) return;
+
+    const editor = Window.activeTextEditor;
+    const document = editor.document;
+
+    const ast = await getAst(context);
+    if (!ast) return;
+
+    const params = await showQuickPickFields(ast!);
+    const content = getConstructorContent(ast.detail!, params);
+    const [position, text] = insertNewLineParams(ast!, document, content, "public");
+
+    editor.edit((builder) => builder.insert(position, text));
+}
+
+export async function generateDestructor(context: LSPContext) {
+    if (!Window.activeTextEditor) return;
+
+    const editor = Window.activeTextEditor;
+    const document = editor.document;
+
+    const ast = await getAst(context);
+    if (!ast) return;
+
+    const content = getDestructorContent(ast.detail!);
+    const [position, text] = insertNewLineParams(ast!, document, content, "public");
+
+    editor.edit((builder) => builder.insert(position, text));
+}
+
+export async function generateConstructorDestructor(context: LSPContext) {
+    if (!Window.activeTextEditor) return;
+
+    const editor = Window.activeTextEditor;
+    const document = editor.document;
+
+    const ast = await getAst(context);
+    if (!ast) return;
+
+    const params = await showQuickPickFields(ast!);
+    const content = getConstructorDestructorContent(ast.detail!, params);
+    const [position, text] = insertNewLinesParams(ast!, document, content, "public");
+
+    editor.edit((builder) => builder.insert(position, text));
 }

@@ -3,7 +3,12 @@ import { headerSnippet } from "./snippets";
 import { CodeActionKind, commands, ExtensionContext, languages, window as Window } from "vscode";
 import { LSPContext } from "./lsp/setup";
 import { switchHeaderSource } from "./lsp/switchHeaderSource";
-import { GenerateCodeActionProvider } from "./codeActions";
+import {
+    GenerateCodeActionProvider,
+    generateConstructor,
+    generateConstructorDestructor,
+    generateDestructor,
+} from "./codeActions";
 
 export function activate(context: ExtensionContext) {
     const outputChannel = Window.createOutputChannel("cpp-ultimate");
@@ -13,6 +18,10 @@ export function activate(context: ExtensionContext) {
     const lspContext = new LSPContext();
 
     const _switchHeaderSource = () => switchHeaderSource(lspContext.client);
+
+    const _generateConstructor = async () => generateConstructor(lspContext);
+    const _generateDestructor = async () => generateDestructor(lspContext);
+    const _generateConstructorDestructor = async () => generateConstructorDestructor(lspContext);
 
     context.subscriptions.push(
         // LSP
@@ -25,6 +34,9 @@ export function activate(context: ExtensionContext) {
         commands.registerCommand("cpp-ultimate.createCMakeLists", createCMakeLists),
         commands.registerCommand("cpp-ultimate.createClangFormat", createClangFormat),
         commands.registerCommand("cpp-ultimate.switch-header-source", _switchHeaderSource),
+        commands.registerCommand("cpp-ultimate.generate-constructor", _generateConstructor),
+        commands.registerCommand("cpp-ultimate.generate-destructor", _generateDestructor),
+        commands.registerCommand("cpp-ultimate.generate-constructor-destructor", _generateConstructorDestructor),
 
         // Snippets
         headerSnippet,

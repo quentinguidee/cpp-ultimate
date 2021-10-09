@@ -58,6 +58,18 @@
             {
                 "command": "cpp-ultimate.switch-header-source",
                 "title": "Switch between .hpp/.cpp"
+            },
+            {
+                "command": "cpp-ultimate.generate-constructor",
+                "title": "Generate constructor"
+            },
+            {
+                "command": "cpp-ultimate.generate-destructor",
+                "title": "Generate destructor"
+            },
+            {
+                "command": "cpp-ultimate.generate-constructor-destructor",
+                "title": "Generate constructor + destructor"
             }
         ],
         "keybindings": [
