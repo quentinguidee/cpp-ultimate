@@ -8,6 +8,9 @@ import {
     generateConstructor,
     generateConstructorDestructor,
     generateDestructor,
+    generateGetters,
+    generateGettersSetters,
+    generateSetters,
 } from "./codeActions";
 
 export function activate(context: ExtensionContext) {
@@ -22,6 +25,9 @@ export function activate(context: ExtensionContext) {
     const _generateConstructor = async () => generateConstructor(lspContext);
     const _generateDestructor = async () => generateDestructor(lspContext);
     const _generateConstructorDestructor = async () => generateConstructorDestructor(lspContext);
+    const _generateGetters = async () => generateGetters(lspContext);
+    const _generateSetters = async () => generateSetters(lspContext);
+    const _generateGettersSetters = async () => generateGettersSetters(lspContext);
 
     context.subscriptions.push(
         // LSP
@@ -37,6 +43,9 @@ export function activate(context: ExtensionContext) {
         commands.registerCommand("cpp-ultimate.generate-constructor", _generateConstructor),
         commands.registerCommand("cpp-ultimate.generate-destructor", _generateDestructor),
         commands.registerCommand("cpp-ultimate.generate-constructor-destructor", _generateConstructorDestructor),
+        commands.registerCommand("cpp-ultimate.generate-getters", _generateGetters),
+        commands.registerCommand("cpp-ultimate.generate-setters", _generateSetters),
+        commands.registerCommand("cpp-ultimate.generate-getters-setters", _generateGettersSetters),
 
         // Snippets
         headerSnippet,

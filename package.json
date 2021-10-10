@@ -70,6 +70,18 @@
             {
                 "command": "cpp-ultimate.generate-constructor-destructor",
                 "title": "Generate constructor + destructor"
+            },
+            {
+                "command": "cpp-ultimate.generate-getters",
+                "title": "Getters"
+            },
+            {
+                "command": "cpp-ultimate.generate-setters",
+                "title": "Setters"
+            },
+            {
+                "command": "cpp-ultimate.generate-getters-setters",
+                "title": "Getters + setters"
             }
         ],
         "keybindings": [
