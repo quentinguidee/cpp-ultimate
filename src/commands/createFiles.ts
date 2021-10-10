@@ -1,61 +1,55 @@
 import { Octokit } from "@octokit/core";
 import { existsSync, writeFile } from "fs";
-import * as vscode from "vscode";
+import { ProgressLocation, Uri, window as Window, workspace as Workspace } from "vscode";
 
 const octokit = new Octokit();
 
-async function createClass(context: any) {
-    await vscode.window
-        .showInputBox({
-            prompt: "Class name",
-            placeHolder: "Class",
-        })
-        .then((classname) => {
-            if (!classname) return;
+export async function createClass(context: any) {
+    await Window.showInputBox({
+        prompt: "Class name",
+        placeHolder: "Class",
+    }).then((classname) => {
+        if (!classname) return;
 
-            var filename = classname.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
-            if (filename[0] === "_") {
-                filename = filename.slice(1, filename.length);
-            }
+        var filename = classname.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
+        if (filename[0] === "_") {
+            filename = filename.slice(1, filename.length);
+        }
 
-            createFile(context, filename, getHeaderExtension(), getHeaderClassTemplate(filename, classname));
-            createFile(context, filename, getSourceExtension(), getSourceClassTemplate(filename));
-        });
+        createFile(context, filename, getHeaderExtension(), getHeaderClassTemplate(filename, classname));
+        createFile(context, filename, getSourceExtension(), getSourceClassTemplate(filename));
+    });
 }
 
-async function createHeader(context: any) {
-    await vscode.window
-        .showInputBox({
-            prompt: "Header filename",
-            placeHolder: "Filename",
-        })
-        .then((filename) => {
-            if (!filename) return;
-            createFile(context, filename, getHeaderExtension(), getHeaderTemplate(filename));
-        });
+export async function createHeader(context: any) {
+    await Window.showInputBox({
+        prompt: "Header filename",
+        placeHolder: "Filename",
+    }).then((filename) => {
+        if (!filename) return;
+        createFile(context, filename, getHeaderExtension(), getHeaderTemplate(filename));
+    });
 }
 
-async function createSource(context: any) {
-    await vscode.window
-        .showInputBox({
-            prompt: "Source filename",
-            placeHolder: "Filename",
-        })
-        .then((filename) => {
-            if (!filename) return;
-            createFile(context, filename, getSourceExtension(), "");
-        });
+export async function createSource(context: any) {
+    await Window.showInputBox({
+        prompt: "Source filename",
+        placeHolder: "Filename",
+    }).then((filename) => {
+        if (!filename) return;
+        createFile(context, filename, getSourceExtension(), "");
+    });
 }
 
-function createCMakeLists(context: any) {
+export function createCMakeLists(context: any) {
     createFile(context, "CMakeLists", "txt", getCMakeListsTemplate());
 }
 
-async function createClangFormat(context: any) {
-    vscode.window.withProgress(
+export async function createClangFormat(context: any) {
+    Window.withProgress(
         {
             title: "Downloading .clang-format template from Gist...",
-            location: vscode.ProgressLocation.Notification,
+            location: ProgressLocation.Notification,
         },
         (progress, token) => {
             return new Promise((resolve, reject) => {
@@ -69,27 +63,24 @@ async function createClangFormat(context: any) {
 }
 
 function getHeaderExtension(): string {
-    return vscode.workspace.getConfiguration().get("cpp-ultimate.files.header-extension") || "hpp";
+    return Workspace.getConfiguration().get("cpp-ultimate.files.header-extension") || "hpp";
 }
 
 function getSourceExtension(): string {
-    return vscode.workspace.getConfiguration().get("cpp-ultimate.files.source-extension") || "cpp";
+    return Workspace.getConfiguration().get("cpp-ultimate.files.source-extension") || "cpp";
 }
 
 function getClangFormatGistID(): string {
-    return (
-        vscode.workspace.getConfiguration().get("cpp-ultimate.clang-format.gist-id") ||
-        "28ca0c7533aac5a5185b5f2651c35e8a"
-    );
+    return Workspace.getConfiguration().get("cpp-ultimate.clang-format.gist-id") || "28ca0c7533aac5a5185b5f2651c35e8a";
 }
 
-function createFile(context: any, filename: string, extension: string, content: string) {
+export function createFile(context: any, filename: string, extension: string, content: string) {
     const path = context.path + "/" + filename + "." + extension;
     if (existsSync(path)) {
-        vscode.window.showInformationMessage("The file " + filename + "." + extension + " already exists.");
+        Window.showInformationMessage("The file " + filename + "." + extension + " already exists.");
         return;
     }
-    const file = vscode.Uri.file(path);
+    const file = Uri.file(path);
     writeFile(file.fsPath, content, () => {});
 }
 
@@ -161,5 +152,3 @@ async function getClangFormatTemplate(): Promise<string> {
             .catch((e) => reject(e));
     });
 }
-
-export { createClass, createHeader, createSource, createCMakeLists, createClangFormat };

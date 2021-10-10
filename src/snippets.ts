@@ -1,7 +1,11 @@
-import { languages } from "vscode";
+import { ExtensionContext, languages } from "vscode";
 import { TextDocument, Position, CompletionItem, CompletionItemKind, SnippetString } from "vscode";
 
-const headerSnippet = languages.registerCompletionItemProvider(["c", "cpp"], {
+export function activate(context: ExtensionContext) {
+    context.subscriptions.push(headerSnippet);
+}
+
+export const headerSnippet = languages.registerCompletionItemProvider(["c", "cpp"], {
     provideCompletionItems(document: TextDocument, position: Position) {
         const filename = document.fileName
             .replace(/^.*[\\\/]/, "")
@@ -15,5 +19,3 @@ const headerSnippet = languages.registerCompletionItemProvider(["c", "cpp"], {
         return [item];
     },
 });
-
-export { headerSnippet };

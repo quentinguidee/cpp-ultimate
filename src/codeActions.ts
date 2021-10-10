@@ -5,18 +5,26 @@ import {
     CodeActionKind,
     CodeActionProvider,
     Command,
+    ExtensionContext,
+    languages as Languages,
     Range,
     Selection,
     TextDocument,
-    window as Window,
 } from "vscode";
-import { AstNode, getAst } from "./lsp/ast";
-
+import { getAst } from "./lsp/ast";
 import { LSPContext } from "./lsp/setup";
-import { Field, getFields, insertNewLineParams, insertNewLinesParams } from "./utils/documentEdition";
-import { capitalize } from "./utils/string";
+
+export function activate(context: ExtensionContext, lspContext: LSPContext) {
+    context.subscriptions.push(
+        Languages.registerCodeActionsProvider("cpp", new GenerateCodeActionProvider(lspContext), {
+            providedCodeActionKinds: GenerateCodeActionProvider.providedCodeActionsKinds,
+        })
+    );
+}
 
 export class GenerateCodeActionProvider implements CodeActionProvider {
+    static providedCodeActionsKinds = [CodeActionKind.Refactor];
+
     constructor(private context: LSPContext) {}
 
     public async provideCodeActions(
@@ -97,148 +105,4 @@ export class GenerateCodeActionProvider implements CodeActionProvider {
         };
         return action;
     }
-}
-
-function getConstructorContent(className: string, params: Field[]): string {
-    const paramsInside = params.map((field) => `${field.type} ${field.name}`).join(", ");
-    let paramsOutside = "";
-    if (params.length !== 0) {
-        paramsOutside = " : ";
-        paramsOutside += params.map((field) => `${field.name}(${field.name})`).join(", ");
-    }
-    return `${className}(${paramsInside})${paramsOutside} {}`;
-}
-
-function getDestructorContent(className: string): string {
-    return `~${className}() {}`;
-}
-
-function getConstructorDestructorContent(className: string, fields: Field[]): string[] {
-    return [getConstructorContent(className, fields), getDestructorContent(className)];
-}
-
-function getGetters(fields: Field[]) {
-    return fields.map((field) => {
-        const { name, type } = field;
-        return `${type} get${capitalize(name)}() const { return ${name}; }`;
-    });
-}
-
-function getSetters(fields: Field[]) {
-    return fields.map((field) => {
-        const { name, type } = field;
-        return `void set${capitalize(name)}(${type} ${name}) { this->${name} = ${name}; }`;
-    });
-}
-
-function getGettersSetters(fields: Field[]) {
-    const getters = getGetters(fields);
-    const setters = getSetters(fields);
-    return getters.concat(setters);
-}
-
-async function showQuickPickFields(ast: AstNode) {
-    const fields = getFields(ast);
-    const choices = await Window.showQuickPick(
-        fields.map((f) => f.name),
-        { canPickMany: true, title: "Fields to include" }
-    );
-    return fields.filter((field) => choices?.includes(field.name));
-}
-
-export async function generateConstructor(context: LSPContext) {
-    if (!Window.activeTextEditor) return;
-
-    const editor = Window.activeTextEditor;
-    const document = editor.document;
-
-    const ast = await getAst(context);
-    if (!ast) return;
-
-    const fields = await showQuickPickFields(ast);
-    const content = getConstructorContent(ast.detail!, fields);
-    const [position, text] = insertNewLineParams(ast, document, content, "public");
-
-    editor.edit((builder) => builder.insert(position, text));
-}
-
-export async function generateDestructor(context: LSPContext) {
-    if (!Window.activeTextEditor) return;
-
-    const editor = Window.activeTextEditor;
-    const document = editor.document;
-
-    const ast = await getAst(context);
-    if (!ast) return;
-
-    const content = getDestructorContent(ast.detail!);
-    const [position, text] = insertNewLineParams(ast, document, content, "public");
-
-    editor.edit((builder) => builder.insert(position, text));
-}
-
-export async function generateConstructorDestructor(context: LSPContext) {
-    if (!Window.activeTextEditor) return;
-
-    const editor = Window.activeTextEditor;
-    const document = editor.document;
-
-    const ast = await getAst(context);
-    if (!ast) return;
-
-    const fields = await showQuickPickFields(ast);
-    const content = getConstructorDestructorContent(ast.detail!, fields);
-    const [position, text] = insertNewLinesParams(ast, document, content, "public");
-
-    editor.edit((builder) => builder.insert(position, text));
-}
-
-export async function generateGetters(context: LSPContext) {
-    if (!Window.activeTextEditor) return;
-
-    const editor = Window.activeTextEditor;
-    const document = editor.document;
-
-    const ast = await getAst(context);
-    if (!ast) return;
-
-    const fields = await showQuickPickFields(ast);
-    const content = getGetters(fields);
-
-    const [position, text] = insertNewLinesParams(ast, document, content, "public");
-
-    editor.edit((builder) => builder.insert(position, text));
-}
-
-export async function generateSetters(context: LSPContext) {
-    if (!Window.activeTextEditor) return;
-
-    const editor = Window.activeTextEditor;
-    const document = editor.document;
-
-    const ast = await getAst(context);
-    if (!ast) return;
-
-    const fields = await showQuickPickFields(ast);
-    const content = getSetters(fields);
-
-    const [position, text] = insertNewLinesParams(ast, document, content, "public");
-
-    editor.edit((builder) => builder.insert(position, text));
-}
-export async function generateGettersSetters(context: LSPContext) {
-    if (!Window.activeTextEditor) return;
-
-    const editor = Window.activeTextEditor;
-    const document = editor.document;
-
-    const ast = await getAst(context);
-    if (!ast) return;
-
-    const fields = await showQuickPickFields(ast);
-    const content = getGettersSetters(fields);
-
-    const [position, text] = insertNewLinesParams(ast, document, content, "public");
-
-    editor.edit((builder) => builder.insert(position, text));
 }
