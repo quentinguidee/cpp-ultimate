@@ -2,56 +2,60 @@ import { Field, getFields, insertNewLinesParams } from "../utils/documentEdition
 import { capitalize } from "../utils/string";
 import { AstNode, getAst } from "../lsp/ast";
 import { LSPContext } from "../lsp/setup";
-import { window as Window } from "vscode";
+import { QuickPickOptions, window as Window } from "vscode";
 
-function getConstructorContent(className: string, fields: Field[]): string {
+type Content = string[];
+
+function getConstructorContent(className: string, fields: Field[]): Content {
     const paramsInside = fields.map((field) => `${field.type} ${field.name}`).join(", ");
     let paramsOutside = "";
     if (fields.length !== 0) {
         paramsOutside = " : ";
         paramsOutside += fields.map((field) => `${field.name}(${field.name})`).join(", ");
     }
-    return `${className}(${paramsInside})${paramsOutside} {}`;
+    return [`${className}(${paramsInside})${paramsOutside} {}`];
 }
 
-function getDestructorContent(className: string): string {
-    return `~${className}() {}`;
+function getDestructorContent(className: string): Content {
+    return [`~${className}() {}`];
 }
 
-function getConstructorDestructorContent(className: string, fields: Field[]): string[] {
-    return [getConstructorContent(className, fields), getDestructorContent(className)];
+function getConstructorDestructorContent(className: string, fields: Field[]): Content {
+    return [...getConstructorContent(className, fields), ...getDestructorContent(className)];
 }
 
-function getGetters(fields: Field[]) {
+function getGetters(fields: Field[]): Content {
     return fields.map((field) => {
         const { name, type } = field;
         return `${type} get${capitalize(name)}() const { return ${name}; }`;
     });
 }
 
-function getSetters(fields: Field[]) {
+function getSetters(fields: Field[]): Content {
     return fields.map((field) => {
         const { name, type } = field;
         return `void set${capitalize(name)}(${type} ${name}) { this->${name} = ${name}; }`;
     });
 }
 
-function getGettersSetters(fields: Field[]) {
+function getGettersSetters(fields: Field[]): Content {
     const getters = getGetters(fields);
     const setters = getSetters(fields);
-    return getters.concat(setters);
+    return [...getters, ...setters];
 }
 
-async function showQuickPickFields(ast: AstNode) {
+async function showQuickPickFields(ast: AstNode): Promise<Field[]> {
     const fields = getFields(ast);
-    const choices = await Window.showQuickPick(
-        fields.map((f) => f.name),
-        { canPickMany: true, title: "Fields to include" }
-    );
+    const items = fields.map((f) => f.name);
+    const options: QuickPickOptions = {
+        canPickMany: true,
+        title: "Fields to include",
+    };
+    const choices = await Window.showQuickPick(items, options);
     return fields.filter((field) => choices?.includes(field.name));
 }
 
-async function generate(context: LSPContext, getContent: (ast: AstNode) => Promise<string[]>) {
+async function generateCode(context: LSPContext, getContent: (ast: AstNode) => Promise<Content>) {
     if (!Window.activeTextEditor) return;
 
     const editor = Window.activeTextEditor;
@@ -68,43 +72,36 @@ async function generate(context: LSPContext, getContent: (ast: AstNode) => Promi
     editor.edit((builder) => builder.insert(position, text));
 }
 
-export async function generateConstructor(context: LSPContext) {
-    generate(context, async (ast) => {
+async function generateCodeWithFields(
+    context: LSPContext,
+    getContent: (ast: AstNode, fields: Field[]) => Promise<Content>
+) {
+    generateCode(context, async (ast) => {
         const fields = await showQuickPickFields(ast);
-        return [getConstructorContent(ast.detail!, fields)];
+        return getContent(ast, fields);
     });
+}
+
+export async function generateConstructor(context: LSPContext) {
+    generateCodeWithFields(context, async (ast, fields) => getConstructorContent(ast.detail!, fields));
 }
 
 export async function generateDestructor(context: LSPContext) {
-    generate(context, async (ast) => {
-        return [getDestructorContent(ast.detail!)];
-    });
+    generateCode(context, async (ast) => getDestructorContent(ast.detail!));
 }
 
 export async function generateConstructorDestructor(context: LSPContext) {
-    generate(context, async (ast) => {
-        const fields = await showQuickPickFields(ast);
-        return getConstructorDestructorContent(ast.detail!, fields);
-    });
+    generateCodeWithFields(context, async (ast, fields) => getConstructorDestructorContent(ast.detail!, fields));
 }
 
 export async function generateGetters(context: LSPContext) {
-    generate(context, async (ast) => {
-        const fields = await showQuickPickFields(ast);
-        return getGetters(fields);
-    });
+    generateCodeWithFields(context, async (_, fields) => getGetters(fields));
 }
 
 export async function generateSetters(context: LSPContext) {
-    generate(context, async (ast) => {
-        const fields = await showQuickPickFields(ast);
-        return getSetters(fields);
-    });
+    generateCodeWithFields(context, async (_, fields) => getSetters(fields));
 }
 
 export async function generateGettersSetters(context: LSPContext) {
-    generate(context, async (ast) => {
-        const fields = await showQuickPickFields(ast);
-        return getGettersSetters(fields);
-    });
+    generateCodeWithFields(context, async (_, fields) => getGettersSetters(fields));
 }
