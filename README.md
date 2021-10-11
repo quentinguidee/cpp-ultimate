@@ -18,7 +18,11 @@ Ultimate extensions are a group of extensions allowing faster coding in VSCode. 
 - C/C++ snippets from clangd and slightly improved (trailing space for keywords, remove hints...)
 - Constructor/destructor
 
-<img width="400" alt="constructor" src="https://user-images.githubusercontent.com/12123721/136666837-be333682-68f5-4b7e-ab2e-13f696b2d626.gif">
+<img width="400" alt="constructor and destructor autogen demo" src="https://user-images.githubusercontent.com/12123721/136836986-eddf23d9-8d43-4420-970d-7f2206b8caca.gif">
+
+- Getters/Setters
+
+<img width="400" alt="getters and setters autogen demo" src="https://user-images.githubusercontent.com/12123721/136836881-0a230d5c-8fe0-4c79-906e-74fb104dc331.gif">
 
 - Switch between header/source
 - Create C++ class/header/source
