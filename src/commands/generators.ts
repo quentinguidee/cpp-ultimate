@@ -3,11 +3,12 @@ import { capitalize } from "../utils/string";
 import { AstNode, getAst } from "../lsp/ast";
 import { LSPContext } from "../lsp/setup";
 import { QuickPickOptions, window as Window } from "vscode";
+import { asConstRef, asConstRefIfNecessary, mustBeConstRef } from "../utils/type";
 
 type Content = string[];
 
 function getConstructorContent(className: string, fields: Field[]): Content {
-    const paramsInside = fields.map((field) => `${field.type} ${field.name}`).join(", ");
+    const paramsInside = fields.map((field) => `${asConstRefIfNecessary(field.type)} ${field.name}`).join(", ");
     let paramsOutside = "";
     if (fields.length !== 0) {
         paramsOutside = " : ";
@@ -25,23 +26,27 @@ function getConstructorDestructorContent(className: string, fields: Field[]): Co
 }
 
 function getGetters(fields: Field[]): Content {
-    return fields.map((field) => {
+    return fields.map((field: Field) => {
         const { name, type } = field;
-        return `${type} get${capitalize(name)}() const { return ${name}; }`;
+        return `${asConstRefIfNecessary(type)} get${capitalize(name)}() const { return ${name}; }`;
     });
 }
 
 function getSetters(fields: Field[]): Content {
-    return fields.map((field) => {
+    return fields.map((field: Field) => {
         const { name, type } = field;
-        return `void set${capitalize(name)}(${type} ${name}) { this->${name} = ${name}; }`;
+        return `void set${capitalize(name)}(${asConstRefIfNecessary(type)} ${name}) { this->${name} = ${name}; }`;
     });
 }
 
 function getGettersSetters(fields: Field[]): Content {
     const getters = getGetters(fields);
     const setters = getSetters(fields);
-    return [...getters, ...setters];
+    if (getters.length !== setters.length) return [];
+    const content = [];
+    for (let i = 0; i < getters.length; i++) content.push(getters[i], setters[i], "");
+    content.pop();
+    return content;
 }
 
 async function showQuickPickFields(ast: AstNode): Promise<Field[]> {

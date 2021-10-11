@@ -1,10 +1,11 @@
 import { Position, Range, TextDocument, TextLine, Uri, window as Window } from "vscode";
 import { AstNode } from "../lsp/ast";
+import { getTypeOf, Type } from "./type";
 
 export type AccessModifier = "private" | "public";
 export type Field = {
     accessModifier: AccessModifier;
-    type: string;
+    type: Type;
     name: string;
 };
 
@@ -35,28 +36,11 @@ export function getFields(ast: AstNode) {
     let currentAccessModifier: AccessModifier = "private";
     let fields: Field[] = [];
 
-    const getType = (node: AstNode): string => {
-        const child = node.children![0];
-
-        if (!child.children) {
-            return child.detail!;
-        }
-
-        let children = child.children;
-        if (children) {
-            if (children.length === 1) return children[0].detail!;
-            return children.map((n) => n.detail).join("");
-        }
-
-        // TODO: Ask to report this bug with popup.
-        return "PLEASE_REPORT_THIS_BUG";
-    };
-
     ast.children?.forEach((node) => {
         if (node.kind === "Field") {
             fields.push({
                 accessModifier: currentAccessModifier,
-                type: getType(node),
+                type: getTypeOf(node),
                 name: node.detail!,
             });
             return;
@@ -69,15 +53,6 @@ export function getFields(ast: AstNode) {
     });
 
     return fields;
-}
-
-export function insertNewLineParams(
-    ast: AstNode,
-    document: TextDocument,
-    content: string,
-    accessModifier: AccessModifier
-): [Position, string, Uri] {
-    return insertNewLinesParams(ast, document, [content], accessModifier);
 }
 
 export function insertNewLinesParams(
@@ -99,7 +74,8 @@ export function insertNewLinesParams(
         text = `${tabs}${accessModifier}:\n`;
     }
 
-    content.forEach((line) => {
+    content.forEach((line: string) => {
+        if (line === "") return (text += "\n");
         text += `${tabs}\t${line}\n`;
     });
 
