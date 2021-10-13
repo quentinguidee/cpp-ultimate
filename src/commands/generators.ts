@@ -51,6 +51,8 @@ function getGettersSetters(fields: Field[]): Content {
 
 async function showQuickPickFields(ast: AstNode): Promise<Field[]> {
     const fields = getFields(ast);
+    if (fields.length === 0) return Promise.resolve([]);
+
     const items = fields.map((f) => f.name);
     const options: QuickPickOptions = {
         canPickMany: true,

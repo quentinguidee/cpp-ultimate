@@ -13,6 +13,7 @@ import {
 } from "vscode";
 import { getAst } from "./lsp/ast";
 import { LSPContext } from "./lsp/setup";
+import { getFields } from "./utils/documentEdition";
 
 export function activate(context: ExtensionContext, lspContext: LSPContext) {
     context.subscriptions.push(
@@ -38,15 +39,12 @@ export class GenerateCodeActionProvider implements CodeActionProvider {
         const ast = await getAst(this.context, document, range);
         if (!ast) return [];
 
+        const fields = getFields(ast);
+
         if (ast.kind === "CXXRecord") {
-            items.push(
-                this.generateConstructorDestructor(),
-                this.generateConstructor(),
-                this.generateDestructor(),
-                this.generateGettersSetters(),
-                this.generateGetters(),
-                this.generateSetters()
-            );
+            items.push(this.generateConstructorDestructor(), this.generateConstructor(), this.generateDestructor());
+            if (fields.length !== 0)
+                items.push(this.generateGettersSetters(), this.generateGetters(), this.generateGetters());
         }
 
         return items;
