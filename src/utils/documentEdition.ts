@@ -1,4 +1,5 @@
 import { Position, Range, TextDocument, TextLine, Uri, window as Window } from "vscode";
+import { TextDocumentEdit } from "vscode-languageserver-types";
 import { AstNode } from "../lsp/ast";
 import { getTypeOf, Type } from "./type";
 
@@ -55,7 +56,7 @@ export function getFields(ast: AstNode) {
     return fields;
 }
 
-export function insertNewLinesParams(
+export function insertNewLinesInHeaderParams(
     ast: AstNode,
     document: TextDocument,
     content: string[],
@@ -81,6 +82,18 @@ export function insertNewLinesParams(
 
     const uri = document.uri;
     const position = new Position(insertLine!, 0);
+
+    return [position, text, uri];
+}
+
+export function insertNewLinesInSourceParams(
+    ast: AstNode,
+    document: TextDocument,
+    content: string[]
+): [Position, string, Uri] {
+    const uri = document.uri;
+    const position = document.validatePosition(new Position(50000, 0));
+    const text = content.join("\n");
 
     return [position, text, uri];
 }

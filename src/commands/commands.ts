@@ -14,12 +14,12 @@ import { switchHeaderSource } from "./switchHeaderSource";
 export function activate(context: ExtensionContext, lspContext: LSPContext) {
     const _switchHeaderSource = () => switchHeaderSource(lspContext.client);
 
-    const _generateConstructor = async () => generateConstructor(lspContext);
-    const _generateDestructor = async () => generateDestructor(lspContext);
-    const _generateConstructorDestructor = async () => generateConstructorDestructor(lspContext);
-    const _generateGetters = async () => generateGetters(lspContext);
-    const _generateSetters = async () => generateSetters(lspContext);
-    const _generateGettersSetters = async () => generateGettersSetters(lspContext);
+    const _generateConstructor = async () => generateConstructor(lspContext.client, lspContext);
+    const _generateDestructor = async () => generateDestructor(lspContext.client, lspContext);
+    const _generateConstructorDestructor = async () => generateConstructorDestructor(lspContext.client, lspContext);
+    const _generateGetters = async () => generateGetters(lspContext.client, lspContext);
+    const _generateSetters = async () => generateSetters(lspContext.client, lspContext);
+    const _generateGettersSetters = async () => generateGettersSetters(lspContext.client, lspContext);
 
     context.subscriptions.push(
         Commands.registerCommand("cpp-ultimate.createClass", createClass),

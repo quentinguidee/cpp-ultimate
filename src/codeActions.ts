@@ -44,7 +44,7 @@ export class GenerateCodeActionProvider implements CodeActionProvider {
         if (ast.kind === "CXXRecord") {
             items.push(this.generateConstructorDestructor(), this.generateConstructor(), this.generateDestructor());
             if (fields.length !== 0)
-                items.push(this.generateGettersSetters(), this.generateGetters(), this.generateGetters());
+                items.push(this.generateGettersSetters(), this.generateGetters(), this.generateSetters());
         }
 
         return items;
